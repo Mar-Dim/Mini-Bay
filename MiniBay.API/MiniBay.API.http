@@ -1,0 +1,6 @@
+@MiniBay.API_HostAddress = http://localhost:5190
+
+GET {{MiniBay.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

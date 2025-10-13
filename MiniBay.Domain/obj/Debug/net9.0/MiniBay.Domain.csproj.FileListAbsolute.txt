@@ -1,0 +1,11 @@
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\bin\Debug\net9.0\MiniBay.Domain.deps.json
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\bin\Debug\net9.0\MiniBay.Domain.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\bin\Debug\net9.0\MiniBay.Domain.pdb
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\MiniBay.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\MiniBay.Domain.AssemblyInfoInputs.cache
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\MiniBay.Domain.AssemblyInfo.cs
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\MiniBay.Domain.csproj.CoreCompileInputs.cache
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\MiniBay.Domain.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\refint\MiniBay.Domain.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\MiniBay.Domain.pdb
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\ref\MiniBay.Domain.dll
