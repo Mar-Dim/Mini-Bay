@@ -199,8 +199,6 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\w
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\icudt_CJK.tjcz0u77k5.dat
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\icudt_EFIGS.tptq2av103.dat
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\icudt_no_CJK.lfu7j35m59.dat
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.9rqrm1tug7.wasm
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.xs1t5vf04x.pdb
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\blazor.boot.json
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\blazor.webassembly.js.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\Microsoft.AspNetCore.Authorization.z6jo10m0rd.wasm.gz
@@ -403,8 +401,6 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\w
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\icudt_CJK.tjcz0u77k5.dat.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\icudt_EFIGS.tptq2av103.dat.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\icudt_no_CJK.lfu7j35m59.dat.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.9rqrm1tug7.wasm.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.xs1t5vf04x.pdb.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\blazor.boot.json.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\MiniBay.Client.staticwebassets.runtime.json
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\MiniBay.Client.staticwebassets.endpoints.json
@@ -818,8 +814,6 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\s
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\scopedcss\projectbundle\MiniBay.Client.bundle.scp.css
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\blazor.build.boot-extension.json
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\blazor.boot.json
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\ffolktlhxh-8rbvw3on5j.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\8m0y496maw-zct0jlgje0.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\ylpnjyr04u-bqjiyaj88i.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\9q73pbqbtx-c2jlpeoesf.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\57hx9hhs6t-erw9l3u2r3.gz
@@ -1068,9 +1062,6 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\c
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\olpe308m4k-tjcz0u77k5.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\kbx1r6p5at-tptq2av103.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\9k7qcsqpjw-lfu7j35m59.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\br4zuhq705-9rqrm1tug7.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\6nuf6hwv00-xs1t5vf04x.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\ykxr8gdiva-vywhq2i4ec.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\staticwebassets.development.json
@@ -1080,3 +1071,13 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\M
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\refint\MiniBay.Client.dll
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\MiniBay.Client.pdb
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\ref\MiniBay.Client.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\MiniBay.Client.sourcelink.json
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\ffolktlhxh-1wxcms3bkp.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\8m0y496maw-rglx6daab2.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.hbe51mqdpf.wasm
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.mami9qs92s.pdb
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.hbe51mqdpf.wasm.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.mami9qs92s.pdb.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\br4zuhq705-hbe51mqdpf.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\6nuf6hwv00-mami9qs92s.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\ykxr8gdiva-cfgdn1e14s.gz

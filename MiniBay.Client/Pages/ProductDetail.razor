@@ -1,0 +1,54 @@
+@page "/product/{Name}"
+@using Microsoft.AspNetCore.Components
+
+@code {
+    [Parameter] public string Name { get; set; }
+
+    Product product;
+
+    protected override void OnInitialized()
+    {
+        // En una versión conectada, esto vendría de la API
+        var allProducts = new List<Product>
+        {
+            new() { Name = "AuricularesBluetooth", ImageUrl = "https://m.media-amazon.com/images/I/61jztn+a7aL._AC_SL1500_.jpg", Price = 35.99m, Description = "Calidad de sonido premium con cancelación de ruido." },
+            new() { Name = "SmartwatchElegante", ImageUrl = "https://m.media-amazon.com/images/I/71R5Rmy3WXL._AC_SL1500_.jpg", Price = 89.50m, Description = "Seguimiento fitness y pantalla AMOLED." },
+            new() { Name = "TecladoMecánicoRGB", ImageUrl = "https://m.media-amazon.com/images/I/71pG-JeRjzL._AC_SL1500_.jpg", Price = 69.90m, Description = "Switches suaves, ideal para gamers y programadores." }
+        };
+
+        product = allProducts.FirstOrDefault(p => p.Name == Uri.UnescapeDataString(Name));
+    }
+
+    public class Product
+    {
+        public string Name { get; set; }
+        public string ImageUrl { get; set; }
+        public decimal Price { get; set; }
+        public string Description { get; set; }
+    }
+}
+
+@if (product is null)
+{
+    <div class="text-center mt-5">
+        <h4>No se encontró el producto</h4>
+    </div>
+}
+else
+{
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <img src="@product.ImageUrl" class="img-fluid rounded-4 shadow-sm" alt="@product.Name" style="max-height: 350px; object-fit: cover;">
+            </div>
+            <div class="col-md-6">
+                <h3>@product.Name</h3>
+                <p class="text-muted">@product.Description</p>
+                <h4 class="text-primary">$@product.Price</h4>
+                <button class="btn btn-custom mt-3 px-4">
+                    <i class="bi bi-cart-plus"></i> Agregar al carrito
+                </button>
+            </div>
+        </div>
+    </div>
+}

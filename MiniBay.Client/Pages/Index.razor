@@ -1,0 +1,37 @@
+@page "/"
+
+@code {
+    public class Product
+    {
+        public string Name { get; set; }
+        public string ImageUrl { get; set; }
+        public decimal Price { get; set; }
+        public string Description { get; set; }
+    }
+
+    List<Product> Products = new()
+    {
+        new() { Name = "AuricularesBluetooth", ImageUrl = "https://m.media-amazon.com/images/I/61jztn+a7aL._AC_SL1500_.jpg", Price = 35.99m, Description = "Calidad de sonido premium con cancelación de ruido." },
+        new() { Name = "SmartwatchElegante", ImageUrl = "https://m.media-amazon.com/images/I/71R5Rmy3WXL._AC_SL1500_.jpg", Price = 89.50m, Description = "Seguimiento fitness y pantalla AMOLED." },
+        new() { Name = "TecladoMecánicoRGB", ImageUrl = "https://m.media-amazon.com/images/I/71pG-JeRjzL._AC_SL1500_.jpg", Price = 69.90m, Description = "Switches suaves, ideal para gamers y programadores." }
+    };
+}
+
+<div class="container mt-5">
+    <h3 class="mb-4 text-center text-secondary">Productos Destacados</h3>
+    <div class="row g-4">
+        @foreach (var p in Products)
+        {
+            <div class="col-12 col-sm-6 col-md-4">
+                <div class="card text-center">
+                    <img src="@p.ImageUrl" class="card-img-top" alt="@p.Name" style="height: 220px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title">@p.Name</h6>
+                        <p class="fw-semibold text-primary">$@p.Price</p>
+                        <a href="/product/@Uri.EscapeDataString(p.Name)" class="btn btn-custom btn-sm">Ver detalles</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
