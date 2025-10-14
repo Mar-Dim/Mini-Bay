@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "MiniBay.Client",
   "resources": {
-    "hash": "sha256-M04sR422Ez26eD3bxBqYlgYwgxuOanG4zCzEYe2gVZs=",
+    "hash": "sha256-n9/bUv3m1FZ+qx9zeu6DK3Yav8Sk3AySH5WwNJJtCAo=",
     "fingerprinting": {
       "Microsoft.AspNetCore.Authorization.z6jo10m0rd.wasm": "Microsoft.AspNetCore.Authorization.wasm",
       "Microsoft.AspNetCore.Components.65wbz7t8mt.wasm": "Microsoft.AspNetCore.Components.wasm",
@@ -201,8 +201,8 @@
       "icudt_CJK.tjcz0u77k5.dat": "icudt_CJK.dat",
       "icudt_EFIGS.tptq2av103.dat": "icudt_EFIGS.dat",
       "icudt_no_CJK.lfu7j35m59.dat": "icudt_no_CJK.dat",
-      "MiniBay.Client.hbe51mqdpf.wasm": "MiniBay.Client.wasm",
-      "MiniBay.Client.mami9qs92s.pdb": "MiniBay.Client.pdb"
+      "MiniBay.Client.zvmmdbc7fm.wasm": "MiniBay.Client.wasm",
+      "MiniBay.Client.fdwuwlnnid.pdb": "MiniBay.Client.pdb"
     },
     "jsModuleNative": {
       "dotnet.native.9ih887ebfz.js": "sha256-oS7IRiQoVt9ThQ7Y2UM3XoeY0JqPD02cg9IvRdufn2w="
@@ -412,10 +412,10 @@
       "WindowsBase.vy2l5u79y6.wasm": "sha256-ufB9Mo5joMyUs3DzXWWBFFIZNEVrt6h9N5stYB6Oln4=",
       "mscorlib.xd6mv31d55.wasm": "sha256-1YSLR2eZt3ceALFV//vZUF2AloxVil3VlrW1zZYPSEI=",
       "netstandard.kaml52uspo.wasm": "sha256-HLEwBpLfzKw2/zGSVzHzFJxznCkt/WIjahrziiMrOpA=",
-      "MiniBay.Client.hbe51mqdpf.wasm": "sha256-vXCNw4Es3PsjR/oyB1DpaRiCCf0xRD+J3so/7lCxUx0="
+      "MiniBay.Client.zvmmdbc7fm.wasm": "sha256-oSkehq+v0Uy0o1hZC41fFpaMV6fwBnFTMsko2WKJTwg="
     },
     "pdb": {
-      "MiniBay.Client.mami9qs92s.pdb": "sha256-XpIg+BD7c9kxm6cEBLvSwPIwC42TVM8oeLNlNxnT9QE="
+      "MiniBay.Client.fdwuwlnnid.pdb": "sha256-Y8NhXPKgTHFgzw65m8qGrF9W43PbdMouPX/kpgbZw48="
     }
   },
   "cacheBootResources": true,

@@ -6,8 +6,25 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <!-- Referencias a otros proyectos -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    <ProjectReference Include="..\MiniBay.Application\MiniBay.Application.csproj" />
+    <ProjectReference Include="..\MiniBay.Infrastructure\MiniBay.Infrastructure.csproj" />
   </ItemGroup>
 
+  <!-- Paquetes NuGet -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+  </ItemGroup>
+  <ItemGroup>
+<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
+<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+</ItemGroup>
 </Project>

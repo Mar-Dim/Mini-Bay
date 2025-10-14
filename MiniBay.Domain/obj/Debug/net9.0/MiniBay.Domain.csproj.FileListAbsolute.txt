@@ -9,3 +9,4 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\M
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\refint\MiniBay.Domain.dll
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\MiniBay.Domain.pdb
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\ref\MiniBay.Domain.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Domain\obj\Debug\net9.0\MiniBay.Domain.sourcelink.json

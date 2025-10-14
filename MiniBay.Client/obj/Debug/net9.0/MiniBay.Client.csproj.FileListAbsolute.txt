@@ -1074,10 +1074,10 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\r
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\MiniBay.Client.sourcelink.json
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\ffolktlhxh-1wxcms3bkp.gz
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\8m0y496maw-rglx6daab2.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.hbe51mqdpf.wasm
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.mami9qs92s.pdb
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.hbe51mqdpf.wasm.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.mami9qs92s.pdb.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\br4zuhq705-hbe51mqdpf.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\6nuf6hwv00-mami9qs92s.gz
-C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\ykxr8gdiva-cfgdn1e14s.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.zvmmdbc7fm.wasm
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.fdwuwlnnid.pdb
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.zvmmdbc7fm.wasm.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\bin\Debug\net9.0\wwwroot\_framework\MiniBay.Client.fdwuwlnnid.pdb.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\br4zuhq705-zvmmdbc7fm.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\6nuf6hwv00-fdwuwlnnid.gz
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Client\obj\Debug\net9.0\compressed\ykxr8gdiva-6cgy2wviwn.gz

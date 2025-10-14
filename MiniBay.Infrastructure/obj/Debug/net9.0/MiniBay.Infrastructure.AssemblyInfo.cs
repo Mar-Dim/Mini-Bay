@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MiniBay.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+69b78e53181bd6d12b93a9e772f155cf5234b531")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97ded609083f27cfe4fb041aba2c67cea1bafcc6")]
 [assembly: System.Reflection.AssemblyProductAttribute("MiniBay.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MiniBay.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
