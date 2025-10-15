@@ -17,21 +17,41 @@
     };
 }
 
-<div class="container mt-5">
-    <h3 class="mb-4 text-center text-secondary">Productos Destacados</h3>
-    <div class="row g-4">
-        @foreach (var p in Products)
-        {
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="card text-center">
-                    <img src="@p.ImageUrl" class="card-img-top" alt="@p.Name" style="height: 220px; object-fit: cover;">
-                    <div class="card-body">
-                        <h6 class="card-title">@p.Name</h6>
-                        <p class="fw-semibold text-primary">$@p.Price</p>
-                        <a href="/product/@Uri.EscapeDataString(p.Name)" class="btn btn-custom btn-sm">Ver detalles</a>
+<div class="mini-container">
+   
+
+    <section class="banner-mini">
+        <div class="banner-content">
+            <h2>Productos Destacados</h2>
+            <p>Calidad y estilo al mejor precio</p>
+            <a href="#" class="btn-banner">Comprar ahora</a>
+        </div>
+    </section>
+
+    <main class="mini-main">
+        <section class="mini-products">
+            @foreach (var p in Products)
+            {
+                <div class="card-product">
+                    <div class="img-container">
+                        <img src="@p.ImageUrl" alt="@p.Name" />
+                        <div class="hover-icons">
+                            <span><i class="fa-regular fa-eye"></i></span>
+                            <span><i class="fa-regular fa-heart"></i></span>
+                            <span><i class="fa-solid fa-basket-shopping"></i></span>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3>@p.Name</h3>
+                        <p class="price">$@p.Price</p>
+                        <p class="desc">@p.Description</p>
+                        <a href="/product/@Uri.EscapeDataString(p.Name)" class="btn-view">Ver detalles</a>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </section>
+    </main>
 </div>
+
+
+
