@@ -1,0 +1,207 @@
+/* --- 1. Definición de Colores con Variables CSS --- */
+:root {
+    /* Paleta de colores para el modo claro (por defecto) */
+    --theme-bg-color: #f8f9ff;
+    --theme-surface-color: #ffffff; /* Color para cards, headers, etc. */
+    --theme-text-primary: #2d2d2d;
+    --theme-text-secondary: #666;
+    --theme-shadow: rgba(0, 0, 0, 0.08);
+
+    /* Colores de la marca */
+    --brand-primary: #f97316; /* Naranja principal */
+    --brand-secondary: #fb923c; /* Naranja secundario */
+    --brand-accent: #e65c00;
+
+    /* Colores del Navbar */
+    --navbar-bg: linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+    --navbar-text: #ffffff;
+}
+
+/* --- 2. Anulaciones para el Modo Oscuro --- */
+body.dark-mode {
+    --theme-bg-color: #121212;
+    --theme-surface-color: #1e1e1e;
+    --theme-text-primary: #e0e0e0;
+    --theme-text-secondary: #a0a0a0;
+    --theme-shadow: rgba(0, 0, 0, 0.25);
+    
+    /* El navbar puede mantener el color de la marca o cambiar. Lo mantenemos por identidad. */
+    /* --navbar-bg: linear-gradient(90deg, #1f1f1f 0%, #2a2a2a 100%); */ /* Ejemplo si quisieras un navbar oscuro */
+}
+
+/* --- 3. Estilos Globales --- */
+body {
+    background-color: var(--theme-bg-color);
+    color: var(--theme-text-primary);
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* --- 4. Estilos del Navbar --- */
+.mini-navbar {
+    background: var(--navbar-bg);
+    padding: 1rem 0;
+    color: var(--navbar-text);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--navbar-text);
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.main-menu {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.main-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Espacio entre icono y texto */
+    text-decoration: none;
+    color: var(--navbar-text);
+    font-weight: 500;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.main-menu a:hover {
+    border-bottom-color: var(--navbar-text);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.search-form input {
+    border-radius: 20px 0 0 20px;
+    border: none;
+    padding: 0.5rem 1rem;
+    width: 200px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+.search-form button {
+    background-color: var(--brand-accent);
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    color: var(--navbar-text);
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn-action:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Lógica para el botón de tema (sol/luna) */
+.theme-toggle {
+    border: none;
+    cursor: pointer;
+}
+.theme-toggle .fa-sun { display: none; }
+.theme-toggle .fa-moon { display: block; }
+
+.dark-mode .theme-toggle .fa-sun { display: block; }
+.dark-mode .theme-toggle .fa-moon { display: none; }
+
+/* Resto de estilos del navbar (responsive, etc.) */
+.menu-toggler {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--navbar-text);
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+@media (max-width: 1024px) {
+    .main-menu { display: none; }
+    .menu-toggler { display: block; }
+}
+
+
+/* --- 5. Estilos del Contenido de la Página (Banner, Productos) --- */
+.banner-mini {
+    background-color: var(--theme-surface-color); /* Fondo para el banner */
+    color: var(--theme-text-primary);
+    text-align: center;
+    padding: 6rem 1rem;
+    border-radius: 10px;
+    margin: 2rem auto;
+    max-width: 1400px;
+}
+
+.btn-banner {
+    background-color: var(--brand-primary);
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.card-product {
+    background: var(--theme-surface-color);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px var(--theme-shadow);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-product:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px var(--theme-shadow);
+}
+
+.product-info h3 {
+    color: var(--theme-text-primary);
+}
+
+.desc {
+    color: var(--theme-text-secondary);
+}
+
+.price {
+    color: var(--brand-primary);
+}
+
+.btn-view {
+    background-color: var(--theme-text-primary);
+    color: var(--theme-bg-color);
+}

@@ -1,17 +1,59 @@
-<nav class="navbar navbar-expand-lg px-4">
-    <a class="navbar-brand fs-4" href="/">MiniBay</a>
+<nav class="mini-navbar">
+    <div class="navbar-container">
 
-    <div class="d-flex align-items-center ms-auto">
-        <input class="form-control me-2" type="search" placeholder="Buscar productos..." style="width: 300px; border-radius: 20px;">
-        <button class="btn btn-custom me-3">
-            <i class="bi bi-search"></i>
+        <!-- 1. Logo -->
+        <div class="logo">
+            <a href="/">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="logo-text">MiniBay</span>
+            </a>
+        </div>
+
+        <!-- 2. Menú de navegación principal con iconos -->
+        <ul class="main-menu">
+            <li>
+                <a href="/"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+            </li>
+            <li>
+                <a href="/about"><i class="fa-solid fa-users"></i><span>Nosotros</span></a>
+            </li>
+            <li>
+                <a href="/contact"><i class="fa-solid fa-envelope"></i><span>Contacto</span></a>
+            </li>
+        </ul>
+
+        <!-- 3. Acciones y búsqueda -->
+        <div class="nav-actions">
+            <form class="search-form">
+                <input type="search" placeholder="Buscar..." />
+                <button type="submit" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+
+            <a href="/upload" class="btn-action">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+            </a>
+            
+            <a href="/cart" class="btn-action cart-btn">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="badge">0</span>
+            </a>
+
+            <button @onclick="ToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
+                <i class="fa-solid fa-moon"></i>
+                <i class="fa-solid fa-sun"></i>
+            </button>
+        </div>
+        
+        <button class="menu-toggler" aria-label="Abrir menú">
+            <i class="fa-solid fa-bars"></i>
         </button>
-        <a href="/upload" class="btn btn-outline-light me-3 rounded-pill">
-            <i class="bi bi-cloud-arrow-up"></i> Vender
-        </a>
-        <a href="/cart" class="btn btn-outline-light position-relative rounded-pill">
-            <i class="bi bi-cart"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-        </a>
+
     </div>
 </nav>
+
+
+
+@code {
+    [Parameter]
+    public EventCallback ToggleDarkMode { get; set; }
+}
