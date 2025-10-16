@@ -1,14 +1,18 @@
 ﻿@inherits LayoutComponentBase
-<MiniBay.Client.Shared.NavMenu />
+@using MiniBay.Client.Shared
+<div class="page @(isDarkMode ? "dark-mode" : "")">
     
-<body class="@(isDarkMode ? "dark-mode" : "")">
-    <div class="page">
-        <div class="sidebar">
-            <NavMenu ToggleDarkMode="ToggleDarkMode" />
-        </div>
-        @Body
-    </div>
-</body>
+   
+    <NavMenu ToggleDarkMode="ToggleDarkMode" />
+
+    <main>
+        
+        <article class="content">
+            @Body
+        </article>
+    </main>
+
+</div>
 
 @code {
     private bool isDarkMode = false;
