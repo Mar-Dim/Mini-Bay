@@ -15,6 +15,7 @@
           "Microsoft.IdentityModel.Tokens": "8.14.0",
           "MiniBay.Application": "1.0.0",
           "MiniBay.Infrastructure": "1.0.0",
+          "MiniBay.Shared": "1.0.0",
           "Swashbuckle.AspNetCore": "6.5.0",
           "System.IdentityModel.Tokens.Jwt": "8.14.0"
         },
@@ -1054,7 +1055,8 @@
       "MiniBay.Application/1.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.9",
-          "MiniBay.Domain": "1.0.0"
+          "MiniBay.Domain": "1.0.0",
+          "MiniBay.Shared": "1.0.0"
         },
         "runtime": {
           "MiniBay.Application.dll": {
@@ -1085,6 +1087,14 @@
         },
         "runtime": {
           "MiniBay.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MiniBay.Shared/1.0.0": {
+        "runtime": {
+          "MiniBay.Shared.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1683,6 +1693,11 @@
       "sha512": ""
     },
     "MiniBay.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MiniBay.Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

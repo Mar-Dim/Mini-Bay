@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\MiniBay.Domain\MiniBay.Domain.csproj" />
+    <ProjectReference Include="..\MiniBay.Shared\MiniBay.Shared.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>

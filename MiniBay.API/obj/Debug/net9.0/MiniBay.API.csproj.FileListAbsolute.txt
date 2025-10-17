@@ -172,3 +172,5 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.API\obj\Debug\net9.0\refi
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.API\obj\Debug\net9.0\MiniBay.API.pdb
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.API\obj\Debug\net9.0\MiniBay.API.genruntimeconfig.cache
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.API\obj\Debug\net9.0\ref\MiniBay.API.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.API\bin\Debug\net9.0\MiniBay.Shared.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.API\bin\Debug\net9.0\MiniBay.Shared.pdb

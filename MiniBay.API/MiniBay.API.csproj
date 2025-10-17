@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MiniBay.Application\MiniBay.Application.csproj" />
     <ProjectReference Include="..\MiniBay.Infrastructure\MiniBay.Infrastructure.csproj" />
+    <ProjectReference Include="..\MiniBay.Shared\MiniBay.Shared.csproj" />
   </ItemGroup>
 
   <!-- Paquetes NuGet -->

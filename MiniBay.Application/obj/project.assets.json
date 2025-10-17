@@ -46,6 +46,16 @@
         "runtime": {
           "bin/placeholder/MiniBay.Domain.dll": {}
         }
+      },
+      "MiniBay.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/MiniBay.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MiniBay.Shared.dll": {}
+        }
       }
     }
   },
@@ -108,12 +118,18 @@
       "type": "project",
       "path": "../MiniBay.Domain/MiniBay.Domain.csproj",
       "msbuildProject": "../MiniBay.Domain/MiniBay.Domain.csproj"
+    },
+    "MiniBay.Shared/1.0.0": {
+      "type": "project",
+      "path": "../MiniBay.Shared/MiniBay.Shared.csproj",
+      "msbuildProject": "../MiniBay.Shared/MiniBay.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
       "Microsoft.Extensions.Configuration.Abstractions >= 7.0.0",
-      "MiniBay.Domain >= 1.0.0"
+      "MiniBay.Domain >= 1.0.0",
+      "MiniBay.Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -143,6 +159,9 @@
           "projectReferences": {
             "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Domain\\MiniBay.Domain.csproj": {
               "projectPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Domain\\MiniBay.Domain.csproj"
+            },
+            "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj": {
+              "projectPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj"
             }
           }
         }

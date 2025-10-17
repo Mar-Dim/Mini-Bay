@@ -1679,7 +1679,8 @@
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
-          "MiniBay.Domain": "1.0.0"
+          "MiniBay.Domain": "1.0.0",
+          "MiniBay.Shared": "1.0.0"
         },
         "compile": {
           "bin/placeholder/MiniBay.Application.dll": {}
@@ -1717,6 +1718,16 @@
         },
         "runtime": {
           "bin/placeholder/MiniBay.Infrastructure.dll": {}
+        }
+      },
+      "MiniBay.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/MiniBay.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MiniBay.Shared.dll": {}
         }
       }
     }
@@ -4959,6 +4970,11 @@
       "type": "project",
       "path": "../MiniBay.Infrastructure/MiniBay.Infrastructure.csproj",
       "msbuildProject": "../MiniBay.Infrastructure/MiniBay.Infrastructure.csproj"
+    },
+    "MiniBay.Shared/1.0.0": {
+      "type": "project",
+      "path": "../MiniBay.Shared/MiniBay.Shared.csproj",
+      "msbuildProject": "../MiniBay.Shared/MiniBay.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -4970,6 +4986,7 @@
       "Microsoft.IdentityModel.Tokens >= 8.14.0",
       "MiniBay.Application >= 1.0.0",
       "MiniBay.Infrastructure >= 1.0.0",
+      "MiniBay.Shared >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.5.0",
       "System.IdentityModel.Tokens.Jwt >= 8.14.0"
     ]
@@ -5004,6 +5021,9 @@
             },
             "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Infrastructure\\MiniBay.Infrastructure.csproj": {
               "projectPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Infrastructure\\MiniBay.Infrastructure.csproj"
+            },
+            "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj": {
+              "projectPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj"
             }
           }
         }

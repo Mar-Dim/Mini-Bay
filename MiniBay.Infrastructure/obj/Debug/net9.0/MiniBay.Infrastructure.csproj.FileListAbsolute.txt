@@ -16,3 +16,5 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Infrastructure\obj\Debug\
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Infrastructure\obj\Debug\net9.0\refint\MiniBay.Infrastructure.dll
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Infrastructure\obj\Debug\net9.0\MiniBay.Infrastructure.pdb
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Infrastructure\obj\Debug\net9.0\ref\MiniBay.Infrastructure.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Infrastructure\bin\Debug\net9.0\MiniBay.Shared.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Infrastructure\bin\Debug\net9.0\MiniBay.Shared.pdb

@@ -572,7 +572,8 @@
       "MiniBay.Application/1.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.9",
-          "MiniBay.Domain": "1.0.0"
+          "MiniBay.Domain": "1.0.0",
+          "MiniBay.Shared": "1.0.0"
         },
         "runtime": {
           "MiniBay.Application.dll": {
@@ -584,6 +585,14 @@
       "MiniBay.Domain/1.0.0": {
         "runtime": {
           "MiniBay.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MiniBay.Shared/1.0.0": {
+        "runtime": {
+          "MiniBay.Shared.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -960,6 +969,11 @@
       "sha512": ""
     },
     "MiniBay.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MiniBay.Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

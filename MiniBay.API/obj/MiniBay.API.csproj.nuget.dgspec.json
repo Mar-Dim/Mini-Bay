@@ -31,6 +31,9 @@
               },
               "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Infrastructure\\MiniBay.Infrastructure.csproj": {
                 "projectPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Infrastructure\\MiniBay.Infrastructure.csproj"
+              },
+              "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj": {
+                "projectPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj"
               }
             }
           }
@@ -129,6 +132,9 @@
             "projectReferences": {
               "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Domain\\MiniBay.Domain.csproj": {
                 "projectPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Domain\\MiniBay.Domain.csproj"
+              },
+              "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj": {
+                "projectPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj"
               }
             }
           }
@@ -309,6 +315,65 @@
               "version": "[8.14.0, )"
             }
           },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj",
+        "projectName": "MiniBay.Shared",
+        "projectPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\MiniBay.Shared.csproj",
+        "packagesPath": "C:\\Users\\patyl\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\patyl\\Documents\\workspace\\git\\MiniBay\\MiniBay.Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\patyl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
           "imports": [
             "net461",
             "net462",

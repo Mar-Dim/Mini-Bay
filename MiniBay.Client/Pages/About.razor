@@ -1,67 +1,87 @@
 @page "/about"
+@using MiniBay.Shared.Features.About   
+@inject HttpClient Http
 
-<!-- Banner Superior -->
-<section class="banner banner-about">
-    <div class="content-banner">
-        <p>Nuestra Misión</p>
-        <h2>Conecta, Vende <br /> y Descubre</h2>
-    </div>
-</section>
+<PageTitle>Sobre Nosotros</PageTitle>
 
-<!-- Contenido Principal -->
-<main class="main-content">
-    <!-- Sección de Introducción -->
-    <section class="about-us-section">
-        <div class="container container-about">
-            <div class="about-us-image">
-                <img src="https://images.pexels.com/photos/7988086/pexels-photo-7988086.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Persona empacando un producto para vender online">
-            </div>
-            <div class="about-us-content">
-                <h1 class="heading-1">Nuestra Esencia</h1>
-                <h2>Un Mercado Impulsado por la Comunidad</h2>
-                <p>
-                    En el corazón de <strong>MiniBay</strong>, creemos que cada objeto tiene una historia y un valor. Nacimos de una idea simple: crear una plataforma segura, intuitiva y amigable donde cualquiera pudiera dar una segunda vida a sus productos y descubrir tesoros únicos de otros usuarios.
-                </p>
-                <p>
-                    Queremos eliminar las barreras de la venta online. Con MiniBay, subir un producto con su imagen y descripción es cuestión de minutos, conectándote instantáneamente con una comunidad de compradores apasionados y listos para encontrar algo especial.
-                </p>
-            </div>
+@if (aboutData == null)
+{
+    <p><em>Cargando nuestra historia...</em></p>
+}
+else
+{
+    <!-- Banner Superior -->
+    <section class="banner banner-about">
+        <div class="content-banner">
+            <p>@aboutData.Banner.Subtitle</p>
+            @* Usamos MarkupString para que el tag <br/> se renderice correctamente *@
+            <h2>@((MarkupString)aboutData.Banner.Title)</h2>
         </div>
     </section>
 
-    <!-- Sección de Pilares -->
-    <section class="container pilares-section">
-        <h1 class="heading-1">Nuestros Pilares</h1>
-        <div class="container-pilares">
-            <div class="pilar-card">
-                <div class="pilar-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-                <h3>Venta Simplificada</h3>
-                <p>Publicar un artículo es tan fácil como tomar una foto. Nuestra interfaz te guía paso a paso para que vendas sin complicaciones.</p>
-            </div>
-            <div class="pilar-card">
-                <div class="pilar-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                <h3>Compras Seguras</h3>
-                <p>Protegemos cada transacción. Compra con la confianza de que tu dinero y tus datos están seguros con nosotros.</p>
-            </div>
-            <div class="pilar-card">
-                <div class="pilar-icon"><i class="fa-solid fa-users"></i></div>
-                <h3>Comunidad Conectada</h3>
-                <p>Somos más que un mercado; somos un punto de encuentro para personas que comparten pasiones e historias a través de sus productos.</p>
-            </div>
-             <div class="pilar-card">
-                <div class="pilar-icon"><i class="fa-solid fa-gem"></i></div>
-                <h3>Descubrimientos Únicos</h3>
-                <p>Explora un catálogo infinito de artículos, desde lo retro hasta lo moderno. Siempre hay algo nuevo y sorprendente por encontrar.</p>
-            </div>
-        </div>
-    </section>
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <!-- Sección de Introducción -->
+        <section class="about-us-section">
+            <div class="container container-about">
+                <div class="about-us-image">
+                    @* Usamos los tags de imagen correctos con el alt text *@
+                    <img src="@aboutData.Introduction.ImageUrl" alt="Persona empacando un producto para vender online">
+                </div>
+                <div class="about-us-content">
+                    @* Colocamos los títulos en los encabezados correctos *@
+                    <h1 class="heading-1">@aboutData.Introduction.Heading</h1>
+                    <h2>@aboutData.Introduction.Title</h2>
 
-    <!-- Galería de Imágenes -->
-    <section class="gallery">
-        <img src="https://images.pexels.com/photos/276528/pexels-photo-276528.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Producto de ejemplo 1" class="gallery-img-1" />
-        <img src="https://images.pexels.com/photos/5632398/pexels-photo-5632398.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Producto de ejemplo 2" class="gallery-img-2" />
-        <img src="https://images.pexels.com/photos/1034664/pexels-photo-1034664.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Producto de ejemplo 3" class="gallery-img-3" />
-        <img src="https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Producto de ejemplo 4" class="gallery-img-4" />
-        <img src="https://images.pexels.com/photos/4123899/pexels-photo-4123899.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Producto de ejemplo 5" class="gallery-img-5" />
-    </section>
-</main>
+                    @* Usamos un bucle @foreach para renderizar cada párrafo en su propio tag <p> *@
+                    @foreach (var paragraph in aboutData.Introduction.Paragraphs)
+                    {
+                        <p>@paragraph</p>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Pilares -->
+        <section class="container pilares-section">
+            <h1 class="heading-1">@aboutData.Pillars.Title</h1>
+            <div class="container-pilares">
+                @* Hacemos un bucle por cada pilar y construimos la tarjeta dinámicamente *@
+                @foreach (var pillar in aboutData.Pillars.PillarItems)
+                {
+                    <div class="pilar-card">
+                        <div class="pilar-icon"><i class="@pillar.Icon"></i></div>
+                        <h3>@pillar.Title</h3>
+                        <p>@pillar.Description</p>
+                    </div>
+                }
+            </div>
+        </section>
+
+        <!-- Galería de Imágenes -->
+        <section class="gallery">
+            @* Un bucle para crear un tag <img> por cada URL en la lista de la galería *@
+            @foreach (var imageUrl in aboutData.Gallery.ImageUrls)
+            {
+                <img src="@imageUrl" alt="Imagen de la galería de productos" />
+            }
+        </section>
+    </main>
+}
+
+
+@code {
+    private AboutUsPageData? aboutData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            aboutData = await Http.GetFromJsonAsync<AboutUsPageData>("api/about");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"No se pudieron cargar los datos de la página 'Sobre Nosotros': {ex.Message}");
+        }
+    }
+}

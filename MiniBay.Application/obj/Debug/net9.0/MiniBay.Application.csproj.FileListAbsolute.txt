@@ -14,3 +14,5 @@ C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Application\bin\Debug\net
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Application\obj\Debug\net9.0\MiniBay.Application.csproj.AssemblyReference.cache
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Application\obj\Debug\net9.0\MiniBay.Application.sourcelink.json
 C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Application\obj\Debug\net9.0\MiniBay..0AB7D014.Up2Date
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Application\bin\Debug\net9.0\MiniBay.Shared.dll
+C:\Users\patyl\Documents\workspace\git\MiniBay\MiniBay.Application\bin\Debug\net9.0\MiniBay.Shared.pdb
