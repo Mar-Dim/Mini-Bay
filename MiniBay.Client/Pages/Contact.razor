@@ -1,4 +1,7 @@
 @page "/contact"
+@using MiniBay.Shared.Features.Contact
+@inject HttpClient Http
+@using System.Net.Http.Json
 
 <!-- Banner Superior -->
 <section class="banner banner-contact">
@@ -14,41 +17,50 @@
         
         <!-- Columna Izquierda: Información de Contacto -->
         <div class="contact-details">
-            <h2>Información de Contacto</h2>
-            <p>No dudes en escribirnos o llamarnos. Estamos listos para resolver tus dudas.</p>
-            
-            <ul class="contact-list">
-                <li>
-                    <i class="fa-solid fa-location-dot"></i>
-                    <div>
-                        <strong>Oficinas</strong>
-                        <span>123 Calle Ficticia, Ciudad Digital</span>
-                    </div>
-                </li>
-                <li>
-                    <i class="fa-solid fa-envelope"></i>
-                    <div>
-                        <strong>Email de Soporte</strong>
-                        <a href="mailto:soporte@minibay.com">soporte@minibay.com</a>
-                    </div>
-                </li>
-                <li>
-                    <i class="fa-solid fa-phone"></i>
-                    <div>
-                        <strong>Atención al Cliente</strong>
-                        <a href="tel:+1234567890">+1 (234) 567-890</a>
-                    </div>
-                </li>
-            </ul>
+            @if (contactInfo == null)
+            {
+                <p><em>Cargando información de contacto...</em></p>
+            }
+            else
+            {
+                <h2>Información de Contacto</h2>
+                <p>No dudes en escribirnos o llamarnos. Estamos listos para resolver tus dudas.</p>
+                
+                <ul class="contact-list">
+                    <li>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div>
+                            <strong>Oficinas</strong>
+                            <span>@contactInfo.Address</span>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-envelope"></i>
+                        <div>
+                            <strong>Email de Soporte</strong>
+                            <a href="mailto:@contactInfo.SupportEmail">@contactInfo.SupportEmail</a>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-phone"></i>
+                        <div>
+                            <strong>Atención al Cliente</strong>
+                            <a href="tel:@contactInfo.CustomerServicePhone">@contactInfo.CustomerServicePhone</a>
+                        </div>
+                    </li>
+                </ul>
 
-            <h3 class="hours-title">Horario de Atención</h3>
-            <ul class="hours-list">
-                <li><strong>Soporte Online:</strong> Lunes a Viernes, 9:00 - 18:00</li>
-                <li><strong>Plataforma:</strong> Disponible 24/7 para compras y ventas</li>
-            </ul>
+                <h3 class="hours-title">Horario de Atención</h3>
+                <ul class="hours-list">
+                    @foreach (var hourInfo in contactInfo.Hours)
+                    {
+                        <li>@((MarkupString)hourInfo)</li>
+                    }
+                </ul>
+            }
         </div>
 
-        <!-- Columna Derecha: Formulario de Contacto -->
+        <!-- Columna Derecha: Formulario de Contacto (sin cambios) -->
         <div class="contact-form-container">
             <h2>Envíanos un Mensaje</h2>
             <p>Completa el formulario y nuestro equipo te responderá a la brevedad.</p>
@@ -75,3 +87,22 @@
 
     </section>
 </main>
+
+@code {
+    private ContactInfoDto? contactInfo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // La URL debe coincidir con la ruta de tu API.
+            // Asegúrate de que HttpClient tenga la URL base de tu API configurada en Program.cs.
+            contactInfo = await Http.GetFromJsonAsync<ContactInfoDto>("api/contact");
+        }
+        catch (Exception ex)
+        {
+            // Opcional: Manejar errores, por ejemplo, si la API no está disponible.
+            Console.WriteLine($"Error al cargar la información de contacto: {ex.Message}");
+        }
+    }
+}

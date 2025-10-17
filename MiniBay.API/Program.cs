@@ -3,14 +3,16 @@
 using MiniBay.Application.Interfaces;
 using MiniBay.Infrastructure.Services;
 using MiniBay.Application.Features.About;
+using MiniBay.Application.Features.Contact;
 using MiniBay.Shared.Features.About;
+using MiniBay.Shared.Features.Contact;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ... 
+
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAboutService, AboutService>();
-
+builder.Services.AddScoped<IContactService, ContactService>();
 // --- CONFIGURACIÓN DE CORS ---
 builder.Services.AddCors(options =>
 {
