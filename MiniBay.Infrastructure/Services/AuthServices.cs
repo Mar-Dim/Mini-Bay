@@ -1,73 +1,54 @@
+using MiniBay.Application.DTOs;
+using MiniBay.Application.Exceptions;
 using MiniBay.Application.Interfaces;
 using MiniBay.Domain.Entities;
-using MiniBay.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Configuration;   
 
-namespace MiniBay.Infrastructure.Services
+namespace MiniBay.Application.Services
 {
+    // Esta es la implementación de la interfaz IAuthService
     public class AuthService : IAuthService
     {
-        private readonly MiniBayDbContext _context;
-        private readonly IConfiguration _config;
+        private readonly IUserRepository _userRepository;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly ITokenService _tokenService;
 
-        public AuthService(MiniBayDbContext context, IConfiguration config)
+        public AuthService(IUserRepository userRepository, IPasswordHasher passwordHasher, ITokenService tokenService)
         {
-            _context = context;
-            _config = config;
+            _userRepository = userRepository;
+            _passwordHasher = passwordHasher;
+            _tokenService = tokenService;
         }
 
-        public async Task<string> RegisterAsync(string username, string email, string password)
+        public async Task<string> RegisterAsync(RegisterDto dto)
         {
-            if (await _context.Users.AnyAsync(u => u.Email == email))
-                throw new Exception("User already exists.");
+            if (await _userRepository.ExistsByEmailAsync(dto.Email))
+            {
+                throw new UserAlreadyExistsException(dto.Email);
+            }
 
             var user = new User
             {
-                Username = username,
-                Email = email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password)
+                Username = dto.Username,
+                Email = dto.Email,
+                PasswordHash = _passwordHasher.HashPassword(dto.Password)
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _userRepository.AddAsync(user);
+            await _userRepository.SaveChangesAsync();
 
-            return GenerateToken(user);
+            return _tokenService.GenerateToken(user);
         }
 
-        public async Task<string> LoginAsync(string email, string password)
+        public async Task<string> LoginAsync(LoginDto dto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-                throw new Exception("Invalid credentials.");
+            var user = await _userRepository.GetByEmailAsync(dto.Email);
 
-            return GenerateToken(user);
-        }
-
-        private string GenerateToken(User user)
-        {
-            var claims = new[]
+            if (user == null || !_passwordHasher.VerifyPassword(dto.Password, user.PasswordHash))
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email)
-            };
+                throw new UnauthorizedAccessException("Credenciales inválidas.");
+            }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                _config["Jwt:Issuer"],
-                _config["Jwt:Audience"],
-                claims,
-                expires: DateTime.Now.AddHours(3),
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return _tokenService.GenerateToken(user);
         }
     }
 }

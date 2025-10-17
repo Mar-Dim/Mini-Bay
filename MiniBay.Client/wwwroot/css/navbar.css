@@ -24,9 +24,6 @@ body.dark-mode {
     --theme-text-primary: #e0e0e0;
     --theme-text-secondary: #a0a0a0;
     --theme-shadow: rgba(0, 0, 0, 0.25);
-    
-    /* El navbar puede mantener el color de la marca o cambiar. Lo mantenemos por identidad. */
-    /* --navbar-bg: linear-gradient(90deg, #1f1f1f 0%, #2a2a2a 100%); */ /* Ejemplo si quisieras un navbar oscuro */
 }
 
 /* --- 3. Estilos Globales --- */
@@ -45,6 +42,7 @@ body {
     padding: 1rem 0;
     color: var(--navbar-text);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* Necesario para el posicionamiento de menús */
 }
 
 .navbar-container {
@@ -78,7 +76,7 @@ body {
 .main-menu a {
     display: flex;
     align-items: center;
-    gap: 0.5rem; /* Espacio entre icono y texto */
+    gap: 0.5rem; 
     text-decoration: none;
     color: var(--navbar-text);
     font-weight: 500;
@@ -95,6 +93,10 @@ body {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+}
+
+.search-form {
+    display: flex;
 }
 
 .search-form input {
@@ -124,6 +126,7 @@ body {
     border-radius: 30px;
     color: var(--navbar-text);
     text-decoration: none;
+    border: none;
     transition: background-color 0.3s;
 }
 
@@ -131,35 +134,144 @@ body {
     background-color: rgba(255, 255, 255, 0.4);
 }
 
-/* Lógica para el botón de tema (sol/luna) */
 .theme-toggle {
-    border: none;
     cursor: pointer;
 }
+
 .theme-toggle .fa-sun { display: none; }
 .theme-toggle .fa-moon { display: block; }
 
 .dark-mode .theme-toggle .fa-sun { display: block; }
 .dark-mode .theme-toggle .fa-moon { display: none; }
 
-/* Resto de estilos del navbar (responsive, etc.) */
 .menu-toggler {
-    display: none;
+    display: none; /* Oculto por defecto en pantallas grandes */
     background: none;
     border: none;
     color: var(--navbar-text);
     font-size: 1.8rem;
     cursor: pointer;
 }
-@media (max-width: 1024px) {
-    .main-menu { display: none; }
-    .menu-toggler { display: block; }
+
+/* --- 5. Estilos del Menú de Usuario y Overlay --- */
+.user-menu-container {
+    position: relative;
 }
 
+.user-avatar-btn {
+    padding: 0.5rem;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
 
-/* --- 5. Estilos del Contenido de la Página (Banner, Productos) --- */
+.user-dropdown-menu {
+    display: none; 
+    position: absolute;
+    top: calc(100% + 15px);
+    right: 0;
+    background-color: var(--theme-surface-color);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px var(--theme-shadow);
+    padding: 0.5rem 0;
+    width: 180px;
+    z-index: 1001; 
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.user-dropdown-menu.show {
+    display: block;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    z-index: 1000;
+}
+
+/* --- 6. ESTILOS RESPONSIVOS CORREGIDOS Y UNIFICADOS --- */
+
+@media (max-width: 1024px) {
+    .search-form {
+        display: none;
+    }
+
+    /* Ocultamos el contenedor del menú por defecto en pantallas pequeñas */
+    .nav-links-container {
+        display: none; 
+        position: absolute;
+        top: 100%; 
+        left: 0;
+        width: 100%;
+        background: var(--navbar-bg);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        animation: slideDown 0.3s ease-out;
+        z-index: 999; /* ¡CRÍTICO! Para que se muestre por encima del contenido */
+    }
+
+    /* Mostramos el contenedor cuando Blazor añade la clase 'active' */
+    .nav-links-container.active {
+        display: block;
+    }
+
+    /* Reajustamos .main-menu para que sea vertical DENTRO de su contenedor visible */
+    .main-menu {
+        display: flex; /* Debe ser flex, no none */
+        flex-direction: column; 
+        width: 100%;
+        gap: 0;
+        padding: 0.5rem 0;
+    }
+
+    .main-menu li {
+        width: 100%;
+    }
+
+    .main-menu a {
+        padding: 1rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        justify-content: flex-start;
+    }
+    
+    .main-menu a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-bottom-color: transparent; 
+    }
+
+    /* Mostramos el botón de la hamburguesa */
+    .menu-toggler {
+        display: block; 
+    }
+}
+
+@media (max-width: 768px) {
+    .logo-text {
+        display: none; 
+    }
+    .nav-actions a[href="/upload"] {
+        display: none; 
+    }
+}
+
+/* --- 7. Animaciones y Contenido de Página --- */
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .banner-mini {
-    background-color: var(--theme-surface-color); /* Fondo para el banner */
+    background-color: var(--theme-surface-color);
     color: var(--theme-text-primary);
     text-align: center;
     padding: 6rem 1rem;

@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using MiniBay.Application.DTOs;
+using MiniBay.Application.Exceptions;
 using MiniBay.Application.Interfaces;
 
 namespace MiniBay.API.Controllers
@@ -19,8 +21,12 @@ namespace MiniBay.API.Controllers
         {
             try
             {
-                var token = await _authService.RegisterAsync(dto.Username, dto.Email, dto.Password);
-                return Ok(new { token });
+                var token = await _authService.RegisterAsync(dto);
+                return Ok(new { Token = token });
+            }
+            catch (UserAlreadyExistsException ex)
+            {
+                return Conflict(ex.Message); // 409 Conflict es más semántico para un recurso que ya existe
             }
             catch (Exception ex)
             {
@@ -33,16 +39,17 @@ namespace MiniBay.API.Controllers
         {
             try
             {
-                var token = await _authService.LoginAsync(dto.Email, dto.Password);
-                return Ok(new { token });
+                var token = await _authService.LoginAsync(dto);
+                return Ok(new { Token = token });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message); // 401 Unauthorized
             }
             catch (Exception ex)
             {
-                return Unauthorized(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
     }
-
-    public record RegisterDto(string Username, string Email, string Password);
-    public record LoginDto(string Email, string Password);
 }

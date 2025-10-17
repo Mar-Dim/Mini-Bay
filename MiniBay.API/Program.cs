@@ -4,11 +4,18 @@ using MiniBay.Application.Interfaces;
 using MiniBay.Infrastructure.Services;
 using MiniBay.Application.Features.About;
 using MiniBay.Application.Features.Contact;
-using MiniBay.Shared.Features.About;
-using MiniBay.Shared.Features.Contact;
-
+using Microsoft.EntityFrameworkCore;
+using MiniBay.Infrastructure.Data;
+using MiniBay.Infrastructure.Persistence;
+using MiniBay.Application.Services;
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<MiniBayDbContext>(options =>
+    options.UseSqlServer("Server=localhost,1433;Database=MiniBayDb;User Id=sa;Password=Clave123;TrustServerCertificate=True;"));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
+builder.Services.AddScoped<ITokenService, JwtTokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAboutService, AboutService>();
@@ -19,8 +26,6 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "AllowBlazorClient",
                       policy  =>
                       {
-                          // *** ¡¡LA CORRECCIÓN ESTÁ AQUÍ!! ***
-                          // Debes poner la URL del CLIENTE (Blazor), no la de la API.
                           policy.WithOrigins("http://localhost:5195")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
