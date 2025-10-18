@@ -21,6 +21,36 @@ namespace MiniBay.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("MiniBay.Domain.Entities.Product", b =>
+                {
+                    b.Property<int>("Id_Pro")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Pro"));
+
+                    b.Property<string>("Des_Pro")
+                        .IsRequired()
+                        .HasMaxLength(550)
+                        .HasColumnType("nvarchar(550)");
+
+                    b.Property<string>("Nam_Pro")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Pri_Pro")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Url_Pro")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id_Pro");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("MiniBay.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")

@@ -1,52 +1,228 @@
 @page "/upload"
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
-
+@using MiniBay.Shared.Feature.Products
+@using System.IO
+@inject HttpClient Http
+@inject NavigationManager Navigation
 <h3 class="text-center my-4 text-secondary"> Subir un nuevo producto</h3>
 
 <div class="container">
-    <EditForm Model="@product" OnValidSubmit="OnSubmit">
+    <EditForm Model="@product" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+
         <div class="card p-4 shadow-sm">
             <div class="mb-3">
                 <label class="form-label">Nombre del producto</label>
-                <InputText class="form-control" @bind-Value="product.Name" required />
+                <InputText class="form-control" @bind-Value="product.Nam_Pro" />
+                <ValidationMessage For="@(() => product.Nam_Pro)" class="text-danger small" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Descripción</label>
-                <InputTextArea class="form-control" @bind-Value="product.Description" required />
+                <InputTextArea class="form-control" @bind-Value="product.Des_Pro" />
+                <ValidationMessage For="@(() => product.Des_Pro)" class="text-danger small"/>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Precio</label>
-                <InputNumber class="form-control" @bind-Value="product.Price" required />
+                <InputNumber class="form-control" @bind-Value="product.Pri_Pro" />
+                <ValidationMessage For="@(() => product.Pri_Pro)" class="text-danger small"/>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">URL de la imagen</label>
-                <InputText class="form-control" @bind-Value="product.ImageUrl" required />
+                <label class="form-label">Imagen del producto</label>
+                <InputFile class="form-control" OnChange="LoadFile" accept=".jpg, .jpeg, .png, .gif, .webp" />
             </div>
 
-            <button type="submit" class="btn btn-custom">Subir producto</button>
+            @if (!string.IsNullOrEmpty(statusMessage))
+            {
+                <div class="alert @(isError ? "alert-danger" : "alert-success")">
+                    @statusMessage
+                </div>
+            }
+
+            <button type="submit" class="btn btn-custom" disabled="@isSubmitting">
+                @if (isSubmitting)
+                {
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span> Subiendo...</span>
+                }
+                else
+                {
+                    <span>Subir producto</span>
+                }
+            </button>
         </div>
     </EditForm>
 </div>
 
 @code {
-    Product product = new();
+    private const long MaxUploadSize = 10 * 1024 * 1024;
 
-    void OnSubmit()
+    private static readonly Dictionary<string, List<byte[]>> AllowedMimeSignatures = new(StringComparer.OrdinalIgnoreCase)
     {
-        Console.WriteLine($"Producto subido: {product.Name} - ${product.Price}");
-        // En una versión conectada, aquí harías un POST a la API
+        ["image/jpeg"] = new() {
+            new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 },
+            new byte[] { 0xFF, 0xD8, 0xFF, 0xE1 },
+            new byte[] { 0xFF, 0xD8, 0xFF, 0xE8 }
+        },
+        ["image/png"] = new() {
+            new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }
+        },
+        ["image/gif"] = new() {
+            new byte[] { 0x47, 0x49, 0x46, 0x38, 0x37, 0x61 },
+            new byte[] { 0x47, 0x49, 0x46, 0x38, 0x39, 0x61 }
+        },
+        ["image/webp"] = new() {
+            new byte[] { 0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50 }
+        }
+    };
+
+    private CreateProductsDto product = new();
+    private IBrowserFile? selectedFile;
+    private bool isSubmitting = false;
+    private string? statusMessage;
+    private bool isError = false;
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        statusMessage = null;
+        isError = false;
+        selectedFile = null;
+
+        var file = e.File;
+        if (file == null) return;
+
+        if (file.Size > MaxUploadSize)
+        {
+            isError = true;
+            statusMessage = $"El archivo supera el límite de {(MaxUploadSize / (1024 * 1024))} MB.";
+            return;
+        }
+
+        var mime = file.ContentType ?? string.Empty;
+
+        if (!AllowedMimeSignatures.ContainsKey(mime))
+        {
+            isError = true;
+            statusMessage = "Tipo de archivo no permitido. Usa JPG, PNG, GIF o WEBP.";
+            return;
+        }
+
+        if (!await IsValidFileSignature(file))
+        {
+            isError = true;
+            statusMessage = "Error: El contenido del archivo no coincide con su extensión (ej. .txt renombrado a .png).";
+            return;
+        }
+
+        selectedFile = file;
     }
 
-    public class Product
+    private async Task<bool> IsValidFileSignature(IBrowserFile file)
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public decimal Price { get; set; }
-        public string ImageUrl { get; set; }
+        var mime = file.ContentType;
+        var allowedSignatures = AllowedMimeSignatures[mime];
+
+        await using var stream = file.OpenReadStream(MaxUploadSize);
+
+        var buffer = new byte[12];
+        var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+
+        if (bytesRead == 0) return false;
+
+        foreach (var signature in allowedSignatures)
+        {
+            bool match = true;
+
+            if (mime == "image/webp")
+            {
+                if (buffer.Take(4).SequenceEqual(signature.Take(4)) &&
+                    buffer.Skip(8).Take(4).SequenceEqual(signature.Skip(8).Take(4)))
+                {
+                    return true;
+                }
+                match = false;
+            }
+            else
+            {
+                for (int i = 0; i < signature.Length; i++)
+                {
+                    if (buffer[i] != signature[i])
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+            }
+
+            if (match) return true;
+        }
+
+        return false;
+    }
+
+    private async Task HandleSubmit()
+    {
+        isSubmitting = true;
+        statusMessage = null;
+        isError = false;
+
+        if (selectedFile == null)
+        {
+            statusMessage = "Por favor, selecciona una imagen para subir.";
+            isError = true;
+            isSubmitting = false;
+            return;
+        }
+
+        try
+        {
+            using var formData = new MultipartFormDataContent();
+
+            formData.Add(new StringContent(product.Nam_Pro ?? ""), nameof(product.Nam_Pro));
+            formData.Add(new StringContent(product.Des_Pro ?? ""), nameof(product.Des_Pro));
+            formData.Add(new StringContent(product.Pri_Pro.ToString()), nameof(product.Pri_Pro));
+
+            using var stream = selectedFile.OpenReadStream(MaxUploadSize);
+            using var fileContent = new StreamContent(stream);
+
+            if (!string.IsNullOrWhiteSpace(selectedFile.ContentType))
+            {
+                fileContent.Headers.ContentType =
+                    new System.Net.Http.Headers.MediaTypeHeaderValue(selectedFile.ContentType);
+            }
+
+            formData.Add(fileContent, "imageFile", selectedFile.Name);
+
+            var response = await Http.PostAsync("api/Products", formData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                statusMessage = "¡Producto creado con éxito!";
+                isError = false;
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                statusMessage = $"Error: {await response.Content.ReadAsStringAsync()}";
+                isError = true;
+            }
+        }
+        catch (IOException ioEx)
+        {
+            statusMessage = $"Error de lectura del archivo: {ioEx.Message}";
+            isError = true;
+        }
+        catch (Exception ex)
+        {
+            statusMessage = $"Error de conexión: {ex.Message}";
+            isError = true;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
     }
 }
-
