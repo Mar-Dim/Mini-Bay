@@ -1,0 +1,62 @@
+.notification-container {
+    position: fixed; /* Se mantiene fijo en la pantalla */
+    top: 20px;
+    right: 20px;
+    z-index: 2000; /* Asegura que esté por encima de otros elementos */
+    min-width: 300px;
+}
+
+.notification {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.95;
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification.success {
+    background-color: #28a745; /* Verde */
+}
+
+.notification.error {
+    background-color: #dc3545; /* Rojo */
+}
+
+.notification.info {
+    background-color: #17a2b8; /* Azul */
+}
+
+.notification.warning {
+    background-color: #ffc107; /* Amarillo */
+    color: #212529;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: inherit; /* Hereda el color del padre (.notification) */
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    margin-left: 1rem;
+    opacity: 0.7;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 0.95;
+    }
+}
