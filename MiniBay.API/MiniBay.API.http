@@ -1,6 +1,9 @@
-@MiniBay.API_HostAddress = http://localhost:5190
+@MiniBay.API_HostAddress_HTTP = http://localhost:5190
 
-GET {{MiniBay.API_HostAddress}}/weatherforecast/
+
+### Petición a HTTP
+GET {{MiniBay.API_HostAddress_HTTP}}/weatherforecast/
 Accept: application/json
+
 
 ###
