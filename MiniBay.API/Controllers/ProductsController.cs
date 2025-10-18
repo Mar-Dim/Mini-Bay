@@ -2,6 +2,7 @@
 using MiniBay.Application.DTO;
 using MiniBay.Application.Features.Products;
 using MiniBay.Shared.Feature.Products;
+using MiniBay.Application.Features.Products.Queries;
 using System;
 using System.IO;   
 using System.Linq;
@@ -15,10 +16,24 @@ namespace MiniBay.API.Controllers
     {
         private readonly IProductService _productService;
 
-        public ProductsController(IProductService productService)
+        private readonly IProductQueryService _productQueryService;
+
+        public ProductsController(
+       IProductService productService,
+       IProductQueryService productQueryService)
         {
             _productService = productService;
+            _productQueryService = productQueryService;
         }
+    
+        [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var product = await _productQueryService.GetProductByIdAsync(id);
+        return product == null ? NotFound($"Producto con ID {id} no encontrado.") : Ok(product);
+    }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()

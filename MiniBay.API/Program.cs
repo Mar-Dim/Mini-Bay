@@ -9,7 +9,9 @@ using MiniBay.Infrastructure.Data;
 using MiniBay.Infrastructure.Features.Products;
 using MiniBay.Infrastructure.Persistence;
 using MiniBay.Infrastructure.Services;
-
+using MiniBay.Application.Features.Products.Queries;
+using MiniBay.Application.Contracts.Persistence;
+using MiniBay.Infrastructure.Persistence.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MiniBayDbContext>(options =>
@@ -50,6 +52,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

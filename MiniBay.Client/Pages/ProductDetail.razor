@@ -1,39 +1,29 @@
-@page "/product/{Name}"
+@page "/product/{Id:int}"
 
+@* Hemos eliminado la inyección duplicada y la de IConfiguration *@
+@inject HttpClient Http
+@using MiniBay.Application.DTO
 @using Microsoft.AspNetCore.Authorization
+
 @attribute [Authorize]
 
-@code {
-    [Parameter] public string Name { get; set; }
 
-    Product product;
-
-    protected override void OnInitialized()
-    {
-        // En una versión conectada, esto vendría de la API
-        var allProducts = new List<Product>
-        {
-            new() { Name = "AuricularesBluetooth", ImageUrl = "https://m.media-amazon.com/images/I/61jztn+a7aL._AC_SL1500_.jpg", Price = 35.99m, Description = "Calidad de sonido premium con cancelación de ruido." },
-            new() { Name = "SmartwatchElegante", ImageUrl = "https://m.media-amazon.com/images/I/71R5Rmy3WXL._AC_SL1500_.jpg", Price = 89.50m, Description = "Seguimiento fitness y pantalla AMOLED." },
-            new() { Name = "TecladoMecánicoRGB", ImageUrl = "https://m.media-amazon.com/images/I/71pG-JeRjzL._AC_SL1500_.jpg", Price = 69.90m, Description = "Switches suaves, ideal para gamers y programadores." }
-        };
-
-        product = allProducts.FirstOrDefault(p => p.Name == Uri.UnescapeDataString(Name));
-    }
-
-    public class Product
-    {
-        public string Name { get; set; }
-        public string ImageUrl { get; set; }
-        public decimal Price { get; set; }
-        public string Description { get; set; }
-    }
-}
-
-@if (product is null)
+@if (isLoading)
 {
     <div class="text-center mt-5">
-        <h4>No se encontró el producto</h4>
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando detalles del producto...</p>
+    </div>
+}
+else if (product is null)
+{
+    <div class="alert alert-warning text-center mt-5" role="alert">
+        <h4 class="alert-heading">Producto no encontrado</h4>
+        <p>El producto que buscas no existe o fue removido. Por favor, verifica la URL o vuelve al catálogo.</p>
+        <hr>
+        <a href="/products" class="btn btn-secondary">Volver al catálogo</a>
     </div>
 }
 else
@@ -41,16 +31,66 @@ else
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-6 text-center">
-                <img src="@product.ImageUrl" class="img-fluid rounded-4 shadow-sm" alt="@product.Name" style="max-height: 350px; object-fit: cover;">
+                @* 1. La etiqueta <img> ahora usa la nueva propiedad 'FullImageUrl' *@
+                @*    Esto hace que el HTML sea mucho más limpio y legible. *@
+                <img src="@FullImageUrl" class="img-fluid rounded-4 shadow-sm" alt="@product.Nam_Pro" style="max-height: 400px; object-fit: contain;">
             </div>
-            <div class="col-md-6">
-                <h3>@product.Name</h3>
-                <p class="text-muted">@product.Description</p>
-                <h4 class="text-primary">$@product.Price</h4>
-                <button class="btn btn-custom mt-3 px-4">
-                    <i class="bi bi-cart-plus"></i> Agregar al carrito
+            <div class="col-md-7 col-lg-6">
+                <h3>@product.Nam_Pro</h3>
+                <p class="text-muted fs-5">@product.Des_Pro</p>
+                <h4 class="text-primary mt-3 mb-3">$@product.Pri_Pro.ToString("F2")</h4>
+                <button class="btn btn-success btn-lg mt-3 px-5">
+                    <i class="bi bi-cart-plus-fill me-2"></i> Agregar al carrito
                 </button>
             </div>
         </div>
     </div>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private ProductDto product;
+    private bool isLoading = true;
+
+    // 2. Nueva propiedad para almacenar la URL completa y construida de la imagen.
+    private string FullImageUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        try
+        {
+            product = await Http.GetFromJsonAsync<ProductDto>($"api/Products/{Id}");
+
+            // 3. MODIFICACIÓN PRINCIPAL: Construir la URL completa de la imagen.
+            if (product != null && !string.IsNullOrEmpty(product.Url_Pro))
+            {
+                // Obtenemos la URL base configurada en Program.cs (ej: "https://localhost:7123")
+                var apiBaseAddress = Http.BaseAddress.ToString();
+
+                // Nos aseguramos de que la URL base no tenga una barra al final para evitar dobles barras "//"
+                apiBaseAddress = apiBaseAddress.TrimEnd('/');
+
+                // Combinamos la base de la API con la ruta relativa de la imagen.
+                // Resultado: "https://localhost:7123" + "/images/products/file.jpg"
+                FullImageUrl = $"{apiBaseAddress}{product.Url_Pro}";
+            }
+        }
+        catch (System.Net.Http.HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            product = null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener el producto: {ex.Message}");
+            product = null;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
 }
