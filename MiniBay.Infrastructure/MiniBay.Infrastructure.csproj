@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	
 <ItemGroup>
     <ProjectReference Include="..\MiniBay.Domain\MiniBay.Domain.csproj" />
     <ProjectReference Include="..\MiniBay.Application\MiniBay.Application.csproj" />
