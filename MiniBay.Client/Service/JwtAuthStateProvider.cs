@@ -36,11 +36,12 @@ public class JwtAuthStateProvider : AuthenticationStateProvider
         NotifyAuthenticationStateChanged(authState);
     }
 
-    public void NotifyUserLogout()
-    {
-        var authState = Task.FromResult(_anonymous);
-        NotifyAuthenticationStateChanged(authState);
-    }
+   public void NotifyUserLogout()
+{
+    var authState = Task.FromResult(_anonymous);
+    _http.DefaultRequestHeaders.Authorization = null; 
+    NotifyAuthenticationStateChanged(authState);
+}
 
     private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {

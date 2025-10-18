@@ -39,5 +39,8 @@ namespace MiniBay.Infrastructure.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
+
+    
 }

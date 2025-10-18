@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthStateProvider
+
 @inject LocalStorageService LocalStorage
 @using System.ComponentModel.DataAnnotations
 @using System.Text.Json
@@ -57,36 +58,35 @@
 </div>
 
 @code {
+
     private LoginModel loginModel = new();
     private bool isLoading = false;
     private string? errorMessage;
+
+      [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
 
     private async Task HandleLoginAsync()
     {
         isLoading = true;
         errorMessage = null;
-        StateHasChanged(); // Actualiza la UI para mostrar el spinner
-
+        StateHasChanged(); 
         try
         {
-            // Realiza la llamada POST a tu API con el modelo de login
-            var response = await Http.PostAsJsonAsync("api/auth/login", loginModel);
+           var response = await Http.PostAsJsonAsync("api/auth/login", loginModel);
 
             if (response.IsSuccessStatusCode)
             {
-                // Deserializa la respuesta para obtener el token
                 var result = await response.Content.ReadFromJsonAsync<LoginResult>();
                 if (result?.Token != null)
                 {
-                    // Guarda el token JWT en el almacenamiento local del navegador
                     await LocalStorage.SetItemAsync("authToken", result.Token);
 
-                    // Notifica al sistema de autenticación de Blazor que el usuario ha iniciado sesión
-                    // Esto actualizará el estado en toda la aplicación
                     ((JwtAuthStateProvider)AuthStateProvider).NotifyUserAuthentication(result.Token);
 
-                    // Redirige al usuario a la página de inicio
-                    Navigation.NavigateTo("/");
+                    
+                    Navigation.NavigateTo(ReturnUrl ?? "/");
                 }
                 else
                 {
