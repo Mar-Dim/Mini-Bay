@@ -29,31 +29,54 @@
                 <button type="submit" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
 
-            <a href="/upload" class="btn-action"><i class="fa-solid fa-cloud-arrow-up"></i></a>
-            
-            <a href="/cart" class="btn-action cart-btn">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span class="badge">0</span>
-            </a>
-
-            <button @onclick="ToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
-                <i class="fa-solid fa-moon"></i>
-                <i class="fa-solid fa-sun"></i>
-            </button>
-            
-            <!-- Menú de Usuario con lógica Blazor -->
-            <div class="user-menu-container">
-                <!-- @onclick llama a nuestro método C# -->
-                <!-- @onclick:stopPropagation evita que el clic en el botón cierre el menú inmediatamente -->
-                <button class="btn-action user-avatar-btn" @onclick="ToggleUserMenu" @onclick:stopPropagation="true">
-                    <i class="fa-solid fa-user-circle"></i>
-                </button>
+                       <AuthorizeView>
                 
-                <!-- El menú desplegable usa una clase condicional -->
-                <div class="user-dropdown-menu @(isUserMenuVisible ? "show" : "")" @onclick:stopPropagation="true">
-                    <a href="/logout">Cerrar Sesión</a>
-                </div>
-            </div>
+                <!-- 1. CONTENIDO PARA USUARIOS AUTENTICADOS -->
+                <Authorized>
+                    <!-- El botón para subir producto solo aparece si está logueado -->
+                    <a href="/upload" class="btn-action"><i class="fa-solid fa-cloud-arrow-up"></i></a>
+            
+                    <!-- El botón del carrito solo aparece si está logueado -->
+                    <a href="/cart" class="btn-action cart-btn">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="badge">0</span> <!-- Aquí podrías mostrar el número de items del usuario -->
+                    </a>
+
+                    <!-- El botón de tema oscuro sigue aquí -->
+                    <button @onclick="ToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
+                        <i class="fa-solid fa-moon"></i>
+                        <i class="fa-solid fa-sun"></i>
+                    </button>
+                    
+                    <!-- El menú de usuario con "Cerrar Sesión" solo aparece si está logueado -->
+                    <div class="user-menu-container">
+                        <button class="btn-action user-avatar-btn" @onclick="ToggleUserMenu" @onclick:stopPropagation="true">
+                            <i class="fa-solid fa-user-circle"></i>
+                        </button>
+                        
+                        <div class="user-dropdown-menu @(isUserMenuVisible ? "show" : "")" @onclick:stopPropagation="true">
+                            <div class="user-info">Hola, @context.User.Identity?.Name</div>
+                            <a href="/logout">Cerrar Sesión</a> <!-- Tu página de logout -->
+                        </div>
+                    </div>
+                </Authorized>
+
+                <NotAuthorized>
+                    <!-- El botón de tema oscuro también puede estar disponible para todos -->
+                    <button @onclick="ToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
+                        <i class="fa-solid fa-moon"></i>
+                        <i class="fa-solid fa-sun"></i>
+                    </button>
+
+                    <!-- En lugar del menú de usuario, mostramos un botón para iniciar sesión -->
+                    <a href="/login" class="btn-action">
+                        <i class="fa-solid fa-sign-in-alt"></i>
+                        <span>Iniciar Sesión</span>
+                    </a>
+                </NotAuthorized>
+
+            </AuthorizeView>
+            
         </div>
         
         <!-- El botón de hamburguesa ahora usa @onclick -->
