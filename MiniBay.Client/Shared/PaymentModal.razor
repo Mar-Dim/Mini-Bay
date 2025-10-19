@@ -1,11 +1,15 @@
 ﻿@using System.ComponentModel.DataAnnotations
 
-<div class="modal fade show" style="display: @(IsVisible ? "block" : "none"); background-color: rgba(0,0,0,0.5);" tabindex="-1">
+<div class="modal fade @animationClass"
+     style="display: @((_internalVisible || isClosing) ? "block" : "none"); background-color: rgba(0,0,0,0.5);"
+     tabindex="-1"
+     aria-hidden="@(!_internalVisible)">
+
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content @animationClass">
             <div class="modal-header">
                 <h5 class="modal-title">Confirmar Pago</h5>
-                <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                <button type="button" class="btn-close" @onclick="StartCloseAnimation" disabled="@isClosing"></button>
             </div>
             <div class="modal-body">
                 <EditForm Model="paymentDetails" OnValidSubmit="HandlePaymentSubmit">
@@ -22,24 +26,24 @@
                             <option value="Transferencia">Transferencia Bancaria</option>
                             <option value="Efectivo">Efectivo (Contra Entrega)</option>
                         </InputSelect>
-                        <ValidationMessage For="@(() => paymentDetails.PaymentMethod)" />
+                        <ValidationMessage For="@(() => paymentDetails.PaymentMethod)" class="validation-message" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Nombre para Factura</label>
                         <InputText @bind-Value="paymentDetails.BillingName" class="form-control" />
-                        <ValidationMessage For="@(() => paymentDetails.BillingName)" />
+                        <ValidationMessage For="@(() => paymentDetails.BillingName)" class="validation-message" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Cédula/RUC para Factura</label>
                         <InputText @bind-Value="paymentDetails.BillingId" class="form-control" />
-                        <ValidationMessage For="@(() => paymentDetails.BillingId)" />
+                        <ValidationMessage For="@(() => paymentDetails.BillingId)" class="validation-message" />
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Confirmar Pago</button>
+                        <button type="button" class="btn btn-secondary" @onclick="StartCloseAnimation" disabled="@isClosing">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" disabled="@isClosing">Confirmar Pago</button>
                     </div>
                 </EditForm>
             </div>
@@ -54,15 +58,53 @@
     [Parameter] public EventCallback<PaymentDetails> OnPaymentConfirmed { get; set; }
 
     private PaymentDetails paymentDetails = new();
+    private bool isClosing = false;
+    private bool _internalVisible = false;
+    private string animationClass = "";
 
-    private Task CloseModal()
+    protected override async Task OnParametersSetAsync()
     {
-        paymentDetails = new();
-        return OnClose.InvokeAsync();
+        if (IsVisible && !_internalVisible)
+        {
+            _internalVisible = true;
+            isClosing = false;
+            animationClass = "";
+            await InvokeAsync(StateHasChanged);
+
+            await Task.Delay(10);
+
+            animationClass = "show";
+            await InvokeAsync(StateHasChanged);
+        }
+        else if (!IsVisible && _internalVisible)
+        {
+            _internalVisible = false;
+            isClosing = false;
+            animationClass = "";
+        }
     }
+
+    private async Task StartCloseAnimation()
+    {
+        if (isClosing || !_internalVisible) return;
+
+        isClosing = true;
+        animationClass = "hide";
+        await InvokeAsync(StateHasChanged);
+
+        await Task.Delay(350);
+
+        paymentDetails = new();
+        _internalVisible = false;
+        animationClass = "";
+        await OnClose.InvokeAsync();
+        isClosing = false;
+    }
+
 
     private Task HandlePaymentSubmit()
     {
+        if (isClosing) return Task.CompletedTask;
         return OnPaymentConfirmed.InvokeAsync(paymentDetails);
     }
 

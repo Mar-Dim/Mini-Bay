@@ -674,7 +674,7 @@ body {
     border-radius: 10px;
     border: none;
     box-shadow: 0 8px 25px var(--theme-shadow);
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
 .modal-header {
@@ -774,6 +774,35 @@ body {
         background-color: var(--brand-accent);
         border-color: var(--brand-accent);
     }
+
+.modal.fade {
+    transition: opacity 0.3s linear;
+    opacity: 0;
+}
+
+    .modal.fade.show {
+        opacity: 1;
+    }
+
+    .modal.fade.hide {
+        opacity: 0;
+    }
+
+.modal-dialog {
+    transform: scale(0.9) translateY(-20px);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.modal.hide .modal-dialog {
+    transform: scale(0.9) translateY(-20px);
+    opacity: 0;
+}
 
 
 /* --- START: Dark Mode Overrides --- */
@@ -1098,6 +1127,5 @@ body {
         background-color: var(--brand-accent);
         border-color: var(--brand-accent);
     }
-
 
 /* --- END: Dark Mode Overrides --- */
