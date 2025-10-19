@@ -1,7 +1,8 @@
 @page "/logout"
+@using Blazored.LocalStorage
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthStateProvider
-@inject LocalStorageService LocalStorage
+@inject ILocalStorageService LocalStorage
 
 @code {
     protected override async Task OnInitializedAsync()
