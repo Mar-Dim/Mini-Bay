@@ -1,6 +1,9 @@
 @page "/product/{Id:int}"
 
-@* Hemos eliminado la inyección duplicada y la de IConfiguration *@
+@using MiniBay.Client.Services
+@inject CartService cartService
+@inject NavigationManager Navigation
+
 @inject HttpClient Http
 @using MiniBay.Application.DTO
 @using Microsoft.AspNetCore.Authorization
@@ -31,15 +34,14 @@ else
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-6 text-center">
-                @* 1. La etiqueta <img> ahora usa la nueva propiedad 'FullImageUrl' *@
-                @*    Esto hace que el HTML sea mucho más limpio y legible. *@
                 <img src="@FullImageUrl" class="img-fluid rounded-4 shadow-sm" alt="@product.Nam_Pro" style="max-height: 400px; object-fit: contain;">
             </div>
             <div class="col-md-7 col-lg-6">
                 <h3>@product.Nam_Pro</h3>
                 <p class="text-muted fs-5">@product.Des_Pro</p>
                 <h4 class="text-primary mt-3 mb-3">$@product.Pri_Pro.ToString("F2")</h4>
-                <button class="btn btn-success btn-lg mt-3 px-5">
+
+                <button class="btn btn-success btn-lg mt-3 px-5" @onclick="AddToCart">
                     <i class="bi bi-cart-plus-fill me-2"></i> Agregar al carrito
                 </button>
             </div>
@@ -54,8 +56,6 @@ else
 
     private ProductDto product;
     private bool isLoading = true;
-
-    // 2. Nueva propiedad para almacenar la URL completa y construida de la imagen.
     private string FullImageUrl { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -65,17 +65,10 @@ else
         {
             product = await Http.GetFromJsonAsync<ProductDto>($"api/Products/{Id}");
 
-            // 3. MODIFICACIÓN PRINCIPAL: Construir la URL completa de la imagen.
             if (product != null && !string.IsNullOrEmpty(product.Url_Pro))
             {
-                // Obtenemos la URL base configurada en Program.cs (ej: "https://localhost:7123")
                 var apiBaseAddress = Http.BaseAddress.ToString();
-
-                // Nos aseguramos de que la URL base no tenga una barra al final para evitar dobles barras "//"
                 apiBaseAddress = apiBaseAddress.TrimEnd('/');
-
-                // Combinamos la base de la API con la ruta relativa de la imagen.
-                // Resultado: "https://localhost:7123" + "/images/products/file.jpg"
                 FullImageUrl = $"{apiBaseAddress}{product.Url_Pro}";
             }
         }
@@ -91,6 +84,15 @@ else
         finally
         {
             isLoading = false;
+        }
+    }
+
+    private async Task AddToCart()
+    {
+        if (product != null)
+        {
+            await cartService.AddToCartAsync(product);
+            Navigation.NavigateTo("/cart");
         }
     }
 }

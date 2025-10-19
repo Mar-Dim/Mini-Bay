@@ -1,9 +1,11 @@
 @page "/register"
+@using Blazored.LocalStorage
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthStateProvider
-@inject LocalStorageService LocalStorage
+@inject ILocalStorageService LocalStorage
 @using System.ComponentModel.DataAnnotations
+@using MiniBay.Client.Services
 <div class="login-container">
     <div class="login-card">
         <div class="login-header">
@@ -78,11 +80,10 @@ private async Task HandleRegisterAsync()
 
         if (response.IsSuccessStatusCode)
         {
-            // Si el registro es exitoso, la API devuelve un token para iniciar sesión automáticamente
+            
             var result = await response.Content.ReadFromJsonAsync<LoginResult>();
             if (result?.Token != null)
             {
-                // Guarda el token en el almacenamiento local
                 await LocalStorage.SetItemAsync("authToken", result.Token);
 
                 // Notifica a Blazor que el usuario está ahora autenticado
@@ -133,7 +134,6 @@ public class RegisterModel
     public string ConfirmPassword { get; set; } = string.Empty;
 }
 
-// Se puede reutilizar la misma clase de resultado que en el login
 public class LoginResult
 {
     public string? Token { get; set; }
