@@ -33,19 +33,29 @@ else if (product is null)
 }
 else
 {
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6 text-center">
-                <img src="@FullImageUrl" class="img-fluid rounded-4 shadow-sm" alt="@product.Nam_Pro" style="max-height: 400px; object-fit: contain;">
-            </div>
-            <div class="col-md-7 col-lg-6">
-                <h3>@product.Nam_Pro</h3>
-                <p class="text-muted fs-5">@product.Des_Pro</p>
-                <h4 class="text-primary mt-3 mb-3">$@product.Pri_Pro.ToString("F2")</h4>
+    <div class="container mt-5 product-detail-container">
+        
+        <div class="product-detail-panel">
+            
+            <div class="row">
+                <div class="col-md-6 text-center product-image-col">
+                    
+                    <img src="@FullImageUrl" class="img-fluid rounded-4 shadow-sm product-image" alt="@product.Nam_Pro"> 
+                </div>
+                <div class="col-md-6 product-info-col">
+                   
+                    <h3 class="product-name">@product.Nam_Pro</h3> 
 
-                <button class="btn btn-success btn-lg mt-3 px-5" @onclick="AddToCart">
-                    <i class="bi bi-cart-plus-fill me-2"></i> Agregar al carrito
-                </button>
+                   
+                    <p class="product-description fs-5">@product.Des_Pro</p>
+
+                    
+                    <h4 class="product-price text-primary mt-3 mb-3">$@product.Pri_Pro.ToString("F2")</h4>
+
+                    <button class="btn btn-success btn-lg mt-3 px-5 add-to-cart-button" @onclick="AddToCart">
+                        <i class="bi bi-cart-plus-fill me-2"></i> Agregar al carrito
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -58,7 +68,7 @@ else
 
     private ProductDto product;
     private bool isLoading = true;
-    private string FullImageUrl { get; set; }
+    private string FullImageUrl { get; set; } = string.Empty;
     private int previousId = 0;
 
     protected override async Task OnParametersSetAsync()
@@ -68,6 +78,7 @@ else
             previousId = Id;
             isLoading = true;
             product = null;
+            FullImageUrl = string.Empty;
 
             try
             {
@@ -78,6 +89,10 @@ else
                     var apiBaseAddress = Http.BaseAddress.ToString();
                     apiBaseAddress = apiBaseAddress.TrimEnd('/');
                     FullImageUrl = $"{apiBaseAddress}{product.Url_Pro}";
+                }
+                else if (product != null)
+                {
+                    FullImageUrl = "/images/placeholder.png"; 
                 }
             }
             catch (System.Net.Http.HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -106,3 +121,4 @@ else
         }
     }
 }
+
