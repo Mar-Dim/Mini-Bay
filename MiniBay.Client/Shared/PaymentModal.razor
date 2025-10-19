@@ -1,0 +1,80 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+<div class="modal fade show" style="display: @(IsVisible ? "block" : "none"); background-color: rgba(0,0,0,0.5);" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Pago</h5>
+                <button type="button" class="btn-close" @onclick="CloseModal"></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="paymentDetails" OnValidSubmit="HandlePaymentSubmit">
+                    <DataAnnotationsValidator />
+
+                    <p>Total a Pagar: <strong>@TotalAmount.ToString("C")</strong></p>
+                    <hr />
+
+                    <div class="mb-3">
+                        <label class="form-label">Método de Pago</label>
+                        <InputSelect @bind-Value="paymentDetails.PaymentMethod" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="Tarjeta">Tarjeta de Crédito/Débito</option>
+                            <option value="Transferencia">Transferencia Bancaria</option>
+                            <option value="Efectivo">Efectivo (Contra Entrega)</option>
+                        </InputSelect>
+                        <ValidationMessage For="@(() => paymentDetails.PaymentMethod)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre para Factura</label>
+                        <InputText @bind-Value="paymentDetails.BillingName" class="form-control" />
+                        <ValidationMessage For="@(() => paymentDetails.BillingName)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Cédula/RUC para Factura</label>
+                        <InputText @bind-Value="paymentDetails.BillingId" class="form-control" />
+                        <ValidationMessage For="@(() => paymentDetails.BillingId)" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Confirmar Pago</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public decimal TotalAmount { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback<PaymentDetails> OnPaymentConfirmed { get; set; }
+
+    private PaymentDetails paymentDetails = new();
+
+    private Task CloseModal()
+    {
+        paymentDetails = new();
+        return OnClose.InvokeAsync();
+    }
+
+    private Task HandlePaymentSubmit()
+    {
+        return OnPaymentConfirmed.InvokeAsync(paymentDetails);
+    }
+
+    public class PaymentDetails
+    {
+        [Required(ErrorMessage = "Seleccione un método de pago.")]
+        public string PaymentMethod { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Ingrese el nombre para la factura.")]
+        public string BillingName { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Ingrese la cédula o RUC.")]
+        public string BillingId { get; set; } = string.Empty;
+    }
+}

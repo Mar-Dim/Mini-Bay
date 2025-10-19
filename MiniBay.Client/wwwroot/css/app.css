@@ -1,19 +1,14 @@
-/* --- 1. Definición de Colores con Variables CSS (Si aún no lo tienes en un archivo global) --- */
 :root {
-    /* Paleta de colores para el modo claro (por defecto) */
     --theme-bg-color: #f8f9ff;
-    --theme-surface-color: #ffffff; /* Color para cards, headers, etc. */
+    --theme-surface-color: #ffffff;
     --theme-text-primary: #2d2d2d;
-    --theme-text-secondary: #6c757d; /* Un gris un poco más suave */
+    --theme-text-secondary: #6c757d;
     --theme-shadow: rgba(45, 45, 45, 0.08);
-
-    /* Colores de la marca (se mantienen en ambos modos) */
-    --brand-primary: #f97316; /* Naranja principal */
-    --brand-secondary: #fb923c; /* Naranja secundario */
+    --brand-primary: #f97316;
+    --brand-secondary: #fb923c;
     --brand-accent: #e65c00;
 }
 
-/* --- 2. Anulaciones para el Modo Oscuro --- */
 body.dark-mode, .page.dark-mode {
     --theme-bg-color: #121212;
     --theme-surface-color: #1e1e1e;
@@ -22,12 +17,6 @@ body.dark-mode, .page.dark-mode {
     --theme-shadow: rgba(0, 0, 0, 0.25);
 }
 
-/* --- ======================================================= --- */
-/* --- A PARTIR DE AQUÍ ESTÁ TU CSS REFACTORIZADO --- */
-/* --- ======================================================= --- */
-
-
-/* --- Estilos Generales --- */
 body {
     background-color: var(--theme-bg-color);
     font-family: 'Poppins', 'Segoe UI', sans-serif;
@@ -35,51 +24,47 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: background-color 0.3s, color 0.3s; /* Transición suave */
+    transition: background-color 0.3s, color 0.3s;
 }
 
-/* Contenedor principal para centrar el contenido */
 .mini-container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 1rem;
 }
 
-/* --- Cabecera (Esto puede ser un componente separado o parte de la página) --- */
 .mini-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
-    background-color: var(--theme-surface-color); /* USA VARIABLE */
-    box-shadow: 0 2px 5px var(--theme-shadow);     /* USA VARIABLE */
+    background-color: var(--theme-surface-color);
+    box-shadow: 0 2px 5px var(--theme-shadow);
     flex-wrap: wrap;
     gap: 1rem;
     transition: background-color 0.3s;
 }
 
 .logo h1 {
-    color: var(--brand-primary); /* USA VARIABLE */
+    color: var(--brand-primary);
     margin: 0;
     font-size: 1.8rem;
 }
 
 .mini-nav ul li a {
     text-decoration: none;
-    color: var(--theme-text-primary); /* USA VARIABLE */
+    color: var(--theme-text-primary);
     font-weight: 500;
     transition: color 0.3s;
 }
 
-.mini-nav ul li a:hover {
-    color: var(--brand-primary); /* USA VARIABLE */
-}
+    .mini-nav ul li a:hover {
+        color: var(--brand-primary);
+    }
 
-/* --- Banner --- */
-/* El banner con imagen de fondo generalmente no necesita muchos cambios para el modo oscuro */
 .banner-mini {
     background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://picsum.photos/1200/400') center/cover no-repeat;
-    color: #fff; /* El texto blanco sobre la imagen oscura funciona en ambos modos */
+    color: #fff;
     text-align: center;
     padding: 6rem 1rem;
     border-radius: 10px;
@@ -87,7 +72,7 @@ body {
 }
 
 .btn-banner {
-    background-color: var(--brand-primary); /* USA VARIABLE */
+    background-color: var(--brand-primary);
     color: #fff;
     padding: 0.8rem 2rem;
     border-radius: 5px;
@@ -96,45 +81,100 @@ body {
     transition: background-color 0.3s;
 }
 
-.btn-banner:hover {
-    background-color: var(--brand-accent); /* USA VARIABLE */
-}
+    .btn-banner:hover {
+        background-color: var(--brand-accent);
+    }
 
-/* --- Sección de Productos --- */
 .mini-main {
     padding: 2rem 0;
 }
 
+/* --- MODIFIED: Product Grid --- */
 .mini-products {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    /* Create 3 equal columns */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; /* Increased gap for better spacing */
 }
 
 .card-product {
-    background: var(--theme-surface-color); /* USA VARIABLE */
+    background: var(--theme-surface-color);
     border-radius: 15px;
-    box-shadow: 0 5px 15px var(--theme-shadow); /* USA VARIABLE */
+    box-shadow: 0 5px 15px var(--theme-shadow);
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
     display: flex;
     flex-direction: column;
 }
 
-.card-product:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 20px var(--theme-shadow); /* USA VARIABLE */
-}
+    .card-product:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 20px var(--theme-shadow);
+    }
 
+/* --- MODIFIED: Image Container --- */
 .img-container {
-    /* ... sin cambios de color ... */
+    position: relative; /* Needed for absolute positioning of hover icons */
+    width: 100%;
+    /* Force a square aspect ratio */
+    aspect-ratio: 1 / 1;
+    overflow: hidden; /* Hide parts of image that overflow */
 }
 
-.hover-icons span {
-    background: var(--theme-surface-color); /* USA VARIABLE */
-    box-shadow: 0 2px 5px var(--theme-shadow); /* USA VARIABLE */
-    color: var(--theme-text-secondary); /* Le damos un color al icono */
+    /* --- MODIFIED: Image Styling --- */
+    .img-container img {
+        display: block; /* Remove extra space below image */
+        width: 100%;
+        height: 100%;
+        /* Fill the container without stretching, crop if needed */
+        object-fit: cover;
+        transition: transform 0.3s ease; /* Add transition for hover effect */
+    }
+
+.card-product:hover .img-container img {
+    transform: scale(1.05); /* Slightly zoom image on card hover */
 }
+
+
+/* --- MODIFIED: Hover Icons --- */
+.hover-icons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
+    z-index: 10; /* Ensure icons are above the image */
+}
+
+.card-product:hover .hover-icons {
+    opacity: 1; /* Show on hover */
+}
+/* Style individual icons (span, a, button) */
+.hover-icons span, .hover-icons a, .hover-icons button {
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    box-shadow: 0 2px 5px var(--theme-shadow);
+    color: var(--theme-text-secondary);
+    border-radius: 50%; /* Make them circular */
+    width: 35px;
+    height: 35px;
+    display: inline-flex; /* Use inline-flex for centering */
+    align-items: center;
+    justify-content: center;
+    text-decoration: none; /* Remove underline from links */
+    border: none; /* Remove border from buttons */
+    padding: 0; /* Remove padding from buttons */
+    cursor: pointer;
+}
+
+    .hover-icons span:hover, .hover-icons a:hover, .hover-icons button:hover {
+        background: white;
+        color: var(--brand-primary);
+    }
+/* --- END MODIFIED: Hover Icons --- */
+
 
 .product-info {
     padding: 1.5rem;
@@ -144,21 +184,21 @@ body {
     flex-grow: 1;
 }
 
-.product-info h3 {
-    color: var(--theme-text-primary); /* USA VARIABLE */
-    margin: 0.5rem 0;
-    font-size: 1.25rem;
-}
+    .product-info h3 {
+        color: var(--theme-text-primary);
+        margin: 0.5rem 0;
+        font-size: 1.25rem;
+    }
 
 .price {
-    color: var(--brand-primary); /* USA VARIABLE */
+    color: var(--brand-primary);
     font-weight: bold;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
 }
 
 .desc {
-    color: var(--theme-text-secondary); /* USA VARIABLE */
+    color: var(--theme-text-secondary);
     flex-grow: 1;
     margin-bottom: 1rem;
 }
@@ -166,25 +206,35 @@ body {
 .btn-view {
     display: inline-block;
     margin-top: auto;
-    /* Invertimos los colores para que se adapten a ambos temas */
-    background-color: var(--theme-text-primary); /* USA VARIABLE */
-    color: var(--theme-bg-color);               /* USA VARIABLE */
+    background-color: var(--theme-text-primary);
+    color: var(--theme-bg-color);
     padding: 0.6rem 1.2rem;
     border-radius: 5px;
     text-decoration: none;
     transition: background-color 0.2s, filter 0.2s;
 }
 
-.btn-view:hover {
-    filter: brightness(1.2); /* Un efecto genérico que funciona en ambos modos */
-}
+    .btn-view:hover {
+        filter: brightness(1.2);
+    }
 
-/* --- Ajustes Responsivos (sin cambios de color, se mantienen igual) --- */
+
+/* --- MODIFIED: Responsive Adjustments --- */
 @media (max-width: 992px) {
-    .mini-header {
+    .mini-products {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+    }
+
+    .mini-header { /* Copied from original for completeness */
         flex-direction: column;
         align-items: center;
         gap: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .mini-products {
+        grid-template-columns: 1fr; /* 1 column on small screens */
     }
 }
 

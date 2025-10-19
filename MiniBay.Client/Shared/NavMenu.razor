@@ -3,6 +3,7 @@
 @using MiniBay.Client.Services
 @using MiniBay.Shared.Feature.Products
 @using System.Threading
+@using Microsoft.AspNetCore.Components.Routing 
 @inject CartService cartService
 @inject HttpClient Http
 @inject NavigationManager Navigation
@@ -24,9 +25,9 @@
 
         <div class="nav-links-container @(isMobileMenuVisible ? "active" : "")">
             <ul class="main-menu">
-                <li><a href="/"><i class="fa-solid fa-house"></i><span>Inicio</span></a></li>
-                <li><a href="/about"><i class="fa-solid fa-users"></i><span>Nosotros</span></a></li>
-                <li><a href="/contact"><i class="fa-solid fa-envelope"></i><span>Contacto</span></a></li>
+                <li><NavLink href="/" Match="NavLinkMatch.All"><i class="fa-solid fa-house"></i><span>Inicio</span></NavLink></li>
+                <li><NavLink href="/about"><i class="fa-solid fa-users"></i><span>Nosotros</span></NavLink></li>
+                <li><NavLink href="/contact"><i class="fa-solid fa-envelope"></i><span>Contacto</span></NavLink></li>
             </ul>
         </div>
 
@@ -69,14 +70,14 @@
 
             <AuthorizeView>
                 <Authorized>
-                    <a href="/upload" class="btn-action"><i class="fa-solid fa-cloud-arrow-up"></i></a>
+                    <NavLink href="/upload" class="btn-action"><i class="fa-solid fa-cloud-arrow-up"></i></NavLink>
 
-                    <a href="/cart" class="btn-action cart-btn">
+                    <NavLink href="/cart" class="btn-action cart-btn">
                         <i class="fa-solid fa-cart-shopping"></i>
                         <span class="badge">@cartItemCount</span>
-                    </a>
+                    </NavLink>
 
-                    <button @onclick="ToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
+                    <button @onclick="InvokeToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
                         <i class="fa-solid fa-moon"></i>
                         <i class="fa-solid fa-sun"></i>
                     </button>
@@ -94,15 +95,15 @@
                 </Authorized>
 
                 <NotAuthorized>
-                    <button @onclick="ToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
+                    <button @onclick="InvokeToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
                         <i class="fa-solid fa-moon"></i>
                         <i class="fa-solid fa-sun"></i>
                     </button>
 
-                    <a href="/login" class="btn-action">
+                    <NavLink href="/login" class="btn-action">
                         <i class="fa-solid fa-sign-in-alt"></i>
                         <span>Iniciar Sesión</span>
-                    </a>
+                    </NavLink>
                 </NotAuthorized>
             </AuthorizeView>
 
@@ -242,5 +243,10 @@
         isSearchLoading = false;
         searchQuery = string.Empty;
         searchResults.Clear();
+    }
+
+    private Task InvokeToggleDarkMode()
+    {
+        return ToggleDarkMode.InvokeAsync();
     }
 }

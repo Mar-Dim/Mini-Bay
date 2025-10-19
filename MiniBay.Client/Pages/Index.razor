@@ -1,57 +1,117 @@
 @page "/"
-
-@code {
-    public class Product
-    {
-        public string Name { get; set; }
-        public string ImageUrl { get; set; }
-        public decimal Price { get; set; }
-        public string Description { get; set; }
-    }
-
-    List<Product> Products = new()
-    {
-        new() { Name = "AuricularesBluetooth", ImageUrl = "https://m.media-amazon.com/images/I/61jztn+a7aL._AC_SL1500_.jpg", Price = 35.99m, Description = "Calidad de sonido premium con cancelación de ruido." },
-        new() { Name = "SmartwatchElegante", ImageUrl = "https://m.media-amazon.com/images/I/71R5Rmy3WXL._AC_SL1500_.jpg", Price = 89.50m, Description = "Seguimiento fitness y pantalla AMOLED." },
-        new() { Name = "TecladoMecánicoRGB", ImageUrl = "https://m.media-amazon.com/images/I/71pG-JeRjzL._AC_SL1500_.jpg", Price = 69.90m, Description = "Switches suaves, ideal para gamers y programadores." }
-    };
-}
+@inject HttpClient Http
+@using MiniBay.Application.DTO
+@using MiniBay.Client.Services
+@inject CartService cartService
+@inject NotificationService notificationService
 
 <div class="mini-container">
-   
 
     <section class="banner-mini">
         <div class="banner-content">
             <h2>Productos Destacados</h2>
             <p>Calidad y estilo al mejor precio</p>
-            <a href="#" class="btn-banner">Comprar ahora</a>
+            <a href="#products-section" class="btn-banner">Ver Productos</a>
         </div>
     </section>
 
     <main class="mini-main">
-        <section class="mini-products">
-            @foreach (var p in Products)
+        <section id="products-section" class="mini-products">
+            @if (isLoading)
             {
-                <div class="card-product">
-                    <div class="img-container">
-                        <img src="@p.ImageUrl" alt="@p.Name" />
-                        <div class="hover-icons">
-                            <span><i class="fa-regular fa-eye"></i></span>
-                            <span><i class="fa-regular fa-heart"></i></span>
-                            <span><i class="fa-solid fa-basket-shopping"></i></span>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>@p.Name</h3>
-                        <p class="price">$@p.Price</p>
-                        <p class="desc">@p.Description</p>
-                        <a href="/product/@Uri.EscapeDataString(p.Name)" class="btn-view">Ver detalles</a>
+                <div class="loading-indicator">
+                    <p>Cargando productos...</p>
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
+            }
+            else if (products == null || !products.Any())
+            {
+                <div class="no-products-message">
+                    <p>No hay productos disponibles en este momento.</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var p in products)
+                {
+                    <div class="card-product">
+                        <div class="img-container">
+                            <img src="@p.FullImageUrl" alt="@p.Nam_Pro" />
+                            <div class="hover-icons">
+                                <a href="/product/@p.Id_Pro" title="Ver detalles"><i class="fa-regular fa-eye"></i></a>
+                                <button title="Añadir a favoritos (no implementado)" class="icon-button"><i class="fa-regular fa-heart"></i></button>
+                                <button title="Añadir al carrito" class="icon-button" @onclick="() => AddToCart(p)"><i class="fa-solid fa-basket-shopping"></i></button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>@p.Nam_Pro</h3>
+                            <p class="price">$@p.Pri_Pro.ToString("F2")</p>
+                            <p class="desc">@Truncate(p.Des_Pro, 100)</p>
+                            <a href="/product/@p.Id_Pro" class="btn-view">Ver detalles</a>
+                        </div>
+                    </div>
+                }
             }
         </section>
     </main>
 </div>
 
+@code {
+    private List<ProductViewModel> products = new();
+    private bool isLoading = true;
 
+    private class ProductViewModel : ProductDto
+    {
+        public string FullImageUrl { get; set; } = string.Empty;
+    }
 
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        try
+        {
+            var fetchedProducts = await Http.GetFromJsonAsync<List<ProductDto>>("api/Products");
+            if (fetchedProducts != null)
+            {
+                var apiBaseAddress = Http.BaseAddress?.ToString()?.TrimEnd('/') ?? string.Empty;
+                products = fetchedProducts.Select(p => new ProductViewModel
+                {
+                    Id_Pro = p.Id_Pro,
+                    Nam_Pro = p.Nam_Pro,
+                    Des_Pro = p.Des_Pro,
+                    Pri_Pro = p.Pri_Pro,
+                    Url_Pro = p.Url_Pro,
+                    FullImageUrl = string.IsNullOrEmpty(p.Url_Pro)
+                                        ? "/images/placeholder.png"
+                                        : $"{apiBaseAddress}{p.Url_Pro}"
+                }).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching products: {ex.Message}");
+            products = new List<ProductViewModel>();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task AddToCart(ProductDto product)
+    {
+        await cartService.AddToCartAsync(product);
+        notificationService.ShowNotification($"{product.Nam_Pro} agregado al carrito.", NotificationType.Success);
+    }
+
+    private string Truncate(string text, int maxLength)
+    {
+        if (string.IsNullOrEmpty(text) || text.Length <= maxLength)
+        {
+            return text;
+        }
+        return text.Substring(0, maxLength) + "...";
+    }
+}

@@ -3,6 +3,7 @@
 @using MiniBay.Client.Services
 @inject CartService cartService
 @inject NavigationManager Navigation
+@inject NotificationService notificationService
 
 @inject HttpClient Http
 @using MiniBay.Application.DTO
@@ -23,6 +24,7 @@
 else if (product is null)
 {
     <div class="alert alert-warning text-center mt-5" role="alert">
+        <img src="https://api.iconify.design/material-symbols:error-outline.svg" alt="Error 404" style="width: 80px; height: 80px; margin-bottom: 1rem; opacity: 0.7; color: currentColor;" />
         <h4 class="alert-heading">Producto no encontrado</h4>
         <p>El producto que buscas no existe o fue removido. Por favor, verifica la URL o vuelve al catálogo.</p>
         <hr>
@@ -99,6 +101,7 @@ else
         if (product != null)
         {
             await cartService.AddToCartAsync(product);
+            notificationService.ShowNotification($"{product.Nam_Pro} agregado al carrito.", NotificationType.Success);
             Navigation.NavigateTo("/cart");
         }
     }
