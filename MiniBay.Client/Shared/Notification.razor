@@ -1,0 +1,62 @@
+@inject NotificationService NotificationService
+@implements IDisposable
+
+@if (_isVisible)
+{
+    <div class="notification-container">
+        <div class="notification @_cssClass">
+            <span>@_message</span>
+            <button class="close-btn" @onclick="HideNotification">&times;</button>
+        </div>
+    </div>
+}
+
+@code {
+    private bool _isVisible;
+    private string _message;
+    private string _cssClass;
+
+    protected override void OnInitialized()
+    {
+        // Suscribirse a los eventos del servicio
+        NotificationService.OnShow += ShowNotification;
+        NotificationService.OnHide += HideNotification;
+    }
+
+    private void ShowNotification(string message, NotificationType type)
+    {
+        _message = message;
+        _cssClass = GetCssClassFromType(type);
+        _isVisible = true;
+
+        // Necesario para forzar la actualización de la UI desde un evento
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void HideNotification()
+    {
+        _isVisible = false;
+        
+        // Necesario para forzar la actualización de la UI desde un evento de temporizador
+        InvokeAsync(StateHasChanged);
+    }
+
+    private string GetCssClassFromType(NotificationType type)
+    {
+        return type switch
+        {
+            NotificationType.Success => "success",
+            NotificationType.Error => "error",
+            NotificationType.Info => "info",
+            NotificationType.Warning => "warning",
+            _ => string.Empty
+        };
+    }
+
+    public void Dispose()
+    {
+        // Darse de baja para evitar fugas de memoria
+        NotificationService.OnShow -= ShowNotification;
+        NotificationService.OnHide -= HideNotification;
+    }
+}
