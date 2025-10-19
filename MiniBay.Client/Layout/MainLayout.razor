@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @using MiniBay.Client.Shared
+
+
 <div class="page @(isDarkMode ? "dark-mode" : "")">
     
    
@@ -13,6 +15,7 @@
     </main>
 
 </div>
+<Notification />
 
 @code {
     private bool isDarkMode = false;

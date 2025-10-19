@@ -1,6 +1,6 @@
 @page "/product/{Id:int}"
-
-@* Hemos eliminado la inyección duplicada y la de IConfiguration *@
+@inject CartService CartService
+@inject NotificationService NotificationService
 @inject HttpClient Http
 @using MiniBay.Application.DTO
 @using Microsoft.AspNetCore.Authorization
@@ -39,7 +39,7 @@ else
                 <h3>@product.Nam_Pro</h3>
                 <p class="text-muted fs-5">@product.Des_Pro</p>
                 <h4 class="text-primary mt-3 mb-3">$@product.Pri_Pro.ToString("F2")</h4>
-                <button class="btn btn-success btn-lg mt-3 px-5">
+                <button class="btn btn-success btn-lg mt-3 px-5" @onclick="HandleAddToCart">
                     <i class="bi bi-cart-plus-fill me-2"></i> Agregar al carrito
                 </button>
             </div>
@@ -92,5 +92,16 @@ else
         {
             isLoading = false;
         }
+
+    }
+
+    private void HandleAddToCart()
+    {
+        if (product != null)
+        {
+            CartService.AddToCart(product);
+            Console.WriteLine($"Producto '{product.Nam_Pro}' agregado al carrito.");
+            NotificationService.ShowNotification($"¡'{product.Nam_Pro}' ha sido agregado al carrito!");
+           }
     }
 }

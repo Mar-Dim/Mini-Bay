@@ -1,5 +1,8 @@
+@inject CartService CartService
+@implements IDisposable
+
 <nav class="mini-navbar">
-    <!-- NUEVO: Overlay para cerrar el menú de usuario al hacer clic fuera -->
+   
     @if (isUserMenuVisible)
     {
         <div class="overlay" @onclick="CloseUserMenu"></div>
@@ -39,7 +42,7 @@
                     <!-- El botón del carrito solo aparece si está logueado -->
                     <a href="/cart" class="btn-action cart-btn">
                         <i class="fa-solid fa-cart-shopping"></i>
-                        <span class="badge">0</span> <!-- Aquí podrías mostrar el número de items del usuario -->
+                        <span class="badge">@CartService.GetCartItemCount()</span> <!-- Aquí podrías mostrar el número de items del usuario -->
                     </a>
 
                     <!-- El botón de tema oscuro sigue aquí -->
@@ -98,9 +101,16 @@
     // Estado para controlar la visibilidad del menú de usuario
     private bool isUserMenuVisible = false;
 
-    /// <summary>
-    /// Cambia la visibilidad del menú de navegación en móviles.
-    /// </summary>
+    protected override void OnInitialized()
+    {
+        CartService.OnChange += StateHasChanged;
+    }
+
+    
+    public void Dispose()
+    {
+        CartService.OnChange -= StateHasChanged;
+    }
     private void ToggleMobileMenu()
     {
         isMobileMenuVisible = !isMobileMenuVisible;
