@@ -5,6 +5,7 @@
 @using System.IO
 @inject HttpClient Http
 @inject NavigationManager Navigation
+@inject NotificationService notificationService
 
 <h3 class="text-center my-4 text-secondary"> Subir un nuevo producto</h3>
 
@@ -22,13 +23,13 @@
             <div class="mb-3">
                 <label class="form-label">Descripción</label>
                 <InputTextArea class="form-control" @bind-Value="product.Des_Pro" />
-                <ValidationMessage For="@(() => product.Des_Pro)" class="text-danger small"/>
+                <ValidationMessage For="@(() => product.Des_Pro)" class="text-danger small" />
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Precio</label>
                 <InputNumber class="form-control" @bind-Value="product.Pri_Pro" />
-                <ValidationMessage For="@(() => product.Pri_Pro)" class="text-danger small"/>
+                <ValidationMessage For="@(() => product.Pri_Pro)" class="text-danger small" />
             </div>
 
             <div class="mb-3">
@@ -124,22 +125,27 @@
     private async Task<bool> IsValidFileSignature(IBrowserFile file)
     {
         var mime = file.ContentType;
-        var allowedSignatures = AllowedMimeSignatures[mime];
+        if (mime == null || !AllowedMimeSignatures.TryGetValue(mime, out var allowedSignatures)) return false;
+
 
         await using var stream = file.OpenReadStream(MaxUploadSize);
 
-        var buffer = new byte[12];
+        int maxSignatureLength = AllowedMimeSignatures.Values.SelectMany(list => list).Max(sig => sig.Length);
+        var buffer = new byte[maxSignatureLength];
         var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
 
         if (bytesRead == 0) return false;
 
         foreach (var signature in allowedSignatures)
         {
+            if (bytesRead < signature.Length) continue;
+
             bool match = true;
 
             if (mime == "image/webp")
             {
                 if (buffer.Take(4).SequenceEqual(signature.Take(4)) &&
+                    bytesRead >= 12 &&
                     buffer.Skip(8).Take(4).SequenceEqual(signature.Skip(8).Take(4)))
                 {
                     return true;
@@ -186,7 +192,7 @@
             formData.Add(new StringContent(product.Des_Pro ?? ""), nameof(product.Des_Pro));
             formData.Add(new StringContent(product.Pri_Pro.ToString()), nameof(product.Pri_Pro));
 
-            using var stream = selectedFile.OpenReadStream(MaxUploadSize);
+            await using var stream = selectedFile.OpenReadStream(MaxUploadSize);
             using var fileContent = new StreamContent(stream);
 
             if (!string.IsNullOrWhiteSpace(selectedFile.ContentType))
@@ -201,25 +207,27 @@
 
             if (response.IsSuccessStatusCode)
             {
-                statusMessage = "¡Producto creado con éxito!";
-                isError = false;
+                notificationService.ShowNotification("¡Producto creado con éxito!", NotificationType.Success);
                 Navigation.NavigateTo("/");
             }
             else
             {
                 statusMessage = $"Error: {await response.Content.ReadAsStringAsync()}";
                 isError = true;
+                notificationService.ShowNotification($"Error al crear producto: {statusMessage}", NotificationType.Error);
             }
         }
         catch (IOException ioEx)
         {
             statusMessage = $"Error de lectura del archivo: {ioEx.Message}";
             isError = true;
+            notificationService.ShowNotification(statusMessage, NotificationType.Error);
         }
         catch (Exception ex)
         {
             statusMessage = $"Error de conexión: {ex.Message}";
             isError = true;
+            notificationService.ShowNotification(statusMessage, NotificationType.Error);
         }
         finally
         {

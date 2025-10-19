@@ -3,7 +3,10 @@
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthStateProvider
 
-@inject LocalStorageService LocalStorage
+@using Blazored.LocalStorage
+
+@inject ILocalStorageService LocalStorage
+
 @using System.ComponentModel.DataAnnotations
 @using System.Text.Json
 @using System.Security.Claims
@@ -63,7 +66,7 @@
     private bool isLoading = false;
     private string? errorMessage;
 
-      [Parameter]
+    [Parameter]
     [SupplyParameterFromQuery]
     public string? ReturnUrl { get; set; }
 
@@ -71,21 +74,22 @@
     {
         isLoading = true;
         errorMessage = null;
-        StateHasChanged(); 
+        StateHasChanged();
         try
         {
-           var response = await Http.PostAsJsonAsync("api/auth/login", loginModel);
+            var response = await Http.PostAsJsonAsync("api/auth/login", loginModel);
 
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<LoginResult>();
                 if (result?.Token != null)
                 {
-                    await LocalStorage.SetItemAsync("authToken", result.Token);
+                    // 3. CAMBIAMOS EL MÉTODO A GENÉRICO <string>
+                    await LocalStorage.SetItemAsync<string>("authToken", result.Token);
 
                     ((JwtAuthStateProvider)AuthStateProvider).NotifyUserAuthentication(result.Token);
 
-                    
+
                     Navigation.NavigateTo(ReturnUrl ?? "/");
                 }
                 else
@@ -95,29 +99,25 @@
             }
             else
             {
-                // Si el login falla (ej. credenciales incorrectas), muestra el mensaje de error de la API
                 errorMessage = await response.Content.ReadAsStringAsync();
             }
         }
         catch (HttpRequestException)
         {
-            // Captura errores específicos de red
             errorMessage = "No se pudo conectar con el servidor. Por favor, revisa tu conexión a internet.";
         }
         catch (Exception ex)
         {
-            // Captura cualquier otro error inesperado
             errorMessage = "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.";
-            Console.WriteLine($"Error en login: {ex.Message}"); // Log para depuración
+            Console.WriteLine($"Error en login: {ex.Message}");
         }
         finally
         {
             isLoading = false;
-            StateHasChanged(); // Vuelve a actualizar la UI para ocultar el spinner
+            StateHasChanged();
         }
     }
 
-    // Modelo de datos para el formulario de login (podría estar en MiniBay.Shared)
     public class LoginModel
     {
         [Required(ErrorMessage = "El correo es obligatorio.")]
@@ -128,7 +128,6 @@
         public string Password { get; set; } = string.Empty;
     }
 
-    // Clase para deserializar la respuesta del token desde la API
     public class LoginResult
     {
         public string? Token { get; set; }

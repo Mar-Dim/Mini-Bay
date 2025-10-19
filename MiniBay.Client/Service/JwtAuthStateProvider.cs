@@ -2,14 +2,15 @@ using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
+using Blazored.LocalStorage;
 
 public class JwtAuthStateProvider : AuthenticationStateProvider
 {
-    private readonly LocalStorageService _localStorage;
+    private readonly ILocalStorageService _localStorage;
     private readonly HttpClient _http;
     private readonly AuthenticationState _anonymous;
 
-    public JwtAuthStateProvider(LocalStorageService localStorage, HttpClient http)
+    public JwtAuthStateProvider(ILocalStorageService localStorage, HttpClient http)
     {
         _localStorage = localStorage;
         _http = http;
@@ -18,7 +19,8 @@ public class JwtAuthStateProvider : AuthenticationStateProvider
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var token = await _localStorage.GetItemAsync("authToken");
+        var token = await _localStorage.GetItemAsync<string>("authToken");
+
         if (string.IsNullOrWhiteSpace(token))
         {
             return _anonymous;
@@ -36,12 +38,12 @@ public class JwtAuthStateProvider : AuthenticationStateProvider
         NotifyAuthenticationStateChanged(authState);
     }
 
-   public void NotifyUserLogout()
-{
-    var authState = Task.FromResult(_anonymous);
-    _http.DefaultRequestHeaders.Authorization = null; 
-    NotifyAuthenticationStateChanged(authState);
-}
+    public void NotifyUserLogout()
+    {
+        var authState = Task.FromResult(_anonymous);
+        _http.DefaultRequestHeaders.Authorization = null;
+        NotifyAuthenticationStateChanged(authState);
+    }
 
     private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
@@ -57,9 +59,8 @@ public class JwtAuthStateProvider : AuthenticationStateProvider
             {
                 claims.Add(new Claim(ClaimTypes.Name, name.ToString()!));
             }
-            // Añade más claims si los necesitas (email, roles, etc.)
         }
-        
+
         return claims;
     }
 

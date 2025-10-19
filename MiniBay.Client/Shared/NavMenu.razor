@@ -1,11 +1,18 @@
-@inject CartService CartService
 @implements IDisposable
+@using MiniBay.Application.DTO
+@using MiniBay.Client.Services
+@using MiniBay.Shared.Feature.Products
+@using System.Threading
+@using Microsoft.AspNetCore.Components.Routing 
+@inject CartService cartService
+@inject HttpClient Http
+@inject NavigationManager Navigation
 
 <nav class="mini-navbar">
-   
-    @if (isUserMenuVisible)
+    @if (isUserMenuVisible || (isSearchVisible && searchResults.Any()))
+
     {
-        <div class="overlay" @onclick="CloseUserMenu"></div>
+        <div class="overlay" @onclick="CloseAllMenus"></div>
     }
 
     <div class="navbar-container">
@@ -17,74 +24,95 @@
             </a>
         </div>
 
-        <!-- El contenedor del menú ahora usa una clase condicional de Blazor -->
         <div class="nav-links-container @(isMobileMenuVisible ? "active" : "")">
             <ul class="main-menu">
-                <li><a href="/"><i class="fa-solid fa-house"></i><span>Inicio</span></a></li>
-                <li><a href="/about"><i class="fa-solid fa-users"></i><span>Nosotros</span></a></li>
-                <li><a href="/contact"><i class="fa-solid fa-envelope"></i><span>Contacto</span></a></li>
+                <li><NavLink href="/" Match="NavLinkMatch.All"><i class="fa-solid fa-house"></i><span>Inicio</span></NavLink></li>
+                <li><NavLink href="/about"><i class="fa-solid fa-users"></i><span>Nosotros</span></NavLink></li>
+                <li><NavLink href="/contact"><i class="fa-solid fa-envelope"></i><span>Contacto</span></NavLink></li>
             </ul>
         </div>
 
         <div class="nav-actions">
-            <form class="search-form">
-                <input type="search" placeholder="Buscar..." />
-                <button type="submit" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </form>
 
-                       <AuthorizeView>
-                
-                <!-- 1. CONTENIDO PARA USUARIOS AUTENTICADOS -->
+            <div class="search-form" @onclick:stopPropagation="true">
+                <input type="search" placeholder="Buscar..."
+                       @bind="searchQuery"
+                       @oninput="HandleSearchInput"
+                       @onfocus="() => isSearchVisible = true" />
+
+                <button type="button" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+                @if (isSearchVisible && !string.IsNullOrEmpty(searchQuery))
+                {
+                    <div class="search-results">
+                        @if (isSearchLoading)
+                        {
+                            <div class="search-result-item">Cargando...</div>
+                        }
+                        else if (searchResults.Any())
+                        {
+                            @foreach (var product in searchResults)
+                            {
+                                <div class="search-result-item" @onclick="() => NavigateToProduct(product.Id_Pro)">
+                                    <img src="@product.Url_Pro" alt="@product.Nam_Pro" class="search-result-image" />
+                                    <div class="search-result-info">
+                                        <strong>@product.Nam_Pro</strong>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="search-result-item">No se encontraron productos.</div>
+                        }
+                    </div>
+                }
+            </div>
+
+            <AuthorizeView>
                 <Authorized>
-                    <!-- El botón para subir producto solo aparece si está logueado -->
-                    <a href="/upload" class="btn-action"><i class="fa-solid fa-cloud-arrow-up"></i></a>
-            
-                    <!-- El botón del carrito solo aparece si está logueado -->
-                    <a href="/cart" class="btn-action cart-btn">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span class="badge">@CartService.GetCartItemCount()</span> <!-- Aquí podrías mostrar el número de items del usuario -->
-                    </a>
 
-                    <!-- El botón de tema oscuro sigue aquí -->
-                    <button @onclick="ToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
+                    <NavLink href="/upload" class="btn-action"><i class="fa-solid fa-cloud-arrow-up"></i></NavLink>
+
+
+                    <NavLink href="/cart" class="btn-action cart-btn">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="badge">@cartItemCount</span>
+                    </NavLink>
+
+                    <button @onclick="InvokeToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
                         <i class="fa-solid fa-moon"></i>
                         <i class="fa-solid fa-sun"></i>
                     </button>
-                    
-                    <!-- El menú de usuario con "Cerrar Sesión" solo aparece si está logueado -->
+
                     <div class="user-menu-container">
                         <button class="btn-action user-avatar-btn" @onclick="ToggleUserMenu" @onclick:stopPropagation="true">
                             <i class="fa-solid fa-user-circle"></i>
                         </button>
-                        
+
                         <div class="user-dropdown-menu @(isUserMenuVisible ? "show" : "")" @onclick:stopPropagation="true">
                             <div class="user-info">Hola, @context.User.Identity?.Name</div>
-                            <a href="/logout">Cerrar Sesión</a> <!-- Tu página de logout -->
+                            <a href="/logout">Cerrar Sesión</a>
                         </div>
                     </div>
                 </Authorized>
 
                 <NotAuthorized>
-                    <!-- El botón de tema oscuro también puede estar disponible para todos -->
-                    <button @onclick="ToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
+                    <button @onclick="InvokeToggleDarkMode" class="btn-action theme-toggle" aria-label="Cambiar tema">
                         <i class="fa-solid fa-moon"></i>
                         <i class="fa-solid fa-sun"></i>
                     </button>
 
-                    <!-- En lugar del menú de usuario, mostramos un botón para iniciar sesión -->
-                    <a href="/login" class="btn-action">
+                    <NavLink href="/login" class="btn-action">
                         <i class="fa-solid fa-sign-in-alt"></i>
                         <span>Iniciar Sesión</span>
-                    </a>
+                    </NavLink>
                 </NotAuthorized>
-
             </AuthorizeView>
-            
+
         </div>
-        
-        <!-- El botón de hamburguesa ahora usa @onclick -->
+
         <button class="menu-toggler" @onclick="ToggleMobileMenu" aria-label="Abrir menú">
-            <!-- El icono cambia dinámicamente según el estado -->
             <i class="@(isMobileMenuVisible ? "fa-solid fa-times" : "fa-solid fa-bars")"></i>
         </button>
 
@@ -95,50 +123,134 @@
     [Parameter]
     public EventCallback ToggleDarkMode { get; set; }
 
-    // Estado para controlar la visibilidad del menú móvil
     private bool isMobileMenuVisible = false;
-
-    // Estado para controlar la visibilidad del menú de usuario
     private bool isUserMenuVisible = false;
+    private int cartItemCount = 0;
 
-    protected override void OnInitialized()
+    private string searchQuery = string.Empty;
+    private List<ProductDto> searchResults = new();
+    private bool isSearchVisible = false;
+    private bool isSearchLoading = false;
+    private Timer searchTimer;
+
+    protected override async Task OnInitializedAsync()
     {
-        CartService.OnChange += StateHasChanged;
+        cartItemCount = await GetCartCount();
+        cartService.OnChange += OnCartChanged;
+        searchTimer = new Timer(OnTimerElapsed, null, Timeout.Infinite, Timeout.Infinite);
     }
 
-    
+    private void HandleSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        isSearchVisible = true;
+        isSearchLoading = true;
+
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            isSearchLoading = false;
+            searchResults.Clear();
+            searchTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            StateHasChanged();
+            return;
+        }
+
+        searchTimer.Change(300, Timeout.Infinite);
+    }
+
+    private async void OnTimerElapsed(object? state)
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            isSearchLoading = false;
+            searchResults.Clear();
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        try
+        {
+            var apiBaseAddress = Http.BaseAddress.ToString().TrimEnd('/');
+            var results = await Http.GetFromJsonAsync<List<ProductDto>>($"api/Products/search?query={searchQuery}");
+
+            if (results != null)
+            {
+                foreach (var product in results)
+                {
+                    if (!string.IsNullOrEmpty(product.Url_Pro) && !product.Url_Pro.StartsWith("http"))
+                    {
+                        product.Url_Pro = $"{apiBaseAddress}{product.Url_Pro}";
+                    }
+                }
+                searchResults = results;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al buscar: {ex.Message}");
+            searchResults.Clear();
+        }
+        finally
+        {
+            isSearchLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void NavigateToProduct(int productId)
+    {
+        Navigation.NavigateTo($"/product/{productId}");
+        CloseAllMenus();
+    }
+
+    private async void OnCartChanged()
+    {
+        cartItemCount = await GetCartCount();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task<int> GetCartCount()
+    {
+        var cartItems = await cartService.GetCartItemsAsync();
+        return cartItems.Sum(item => item.Quantity);
+    }
+
     public void Dispose()
     {
-        CartService.OnChange -= StateHasChanged;
+        cartService.OnChange -= StateHasChanged;
+        searchTimer?.Dispose();
     }
+
+
     private void ToggleMobileMenu()
     {
         isMobileMenuVisible = !isMobileMenuVisible;
-        // Si abrimos el menú móvil, nos aseguramos de que el de usuario esté cerrado.
         if (isMobileMenuVisible)
         {
             isUserMenuVisible = false;
         }
     }
 
-    /// <summary>
-    /// Cambia la visibilidad del menú desplegable del usuario.
-    /// </summary>
     private void ToggleUserMenu()
     {
         isUserMenuVisible = !isUserMenuVisible;
-        // Si abrimos el menú de usuario, nos aseguramos de que el móvil esté cerrado.
         if (isUserMenuVisible)
         {
             isMobileMenuVisible = false;
         }
     }
 
-    /// <summary>
-    /// Cierra el menú de usuario (usado por el overlay).
-    /// </summary>
-    private void CloseUserMenu()
+    private void CloseAllMenus()
     {
         isUserMenuVisible = false;
+        isSearchVisible = false;
+        isSearchLoading = false;
+        searchQuery = string.Empty;
+        searchResults.Clear();
+    }
+
+    private Task InvokeToggleDarkMode()
+    {
+        return ToggleDarkMode.InvokeAsync();
     }
 }
