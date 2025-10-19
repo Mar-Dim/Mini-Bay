@@ -1,11 +1,16 @@
 @implements IDisposable
+@using MiniBay.Application.DTO
 @using MiniBay.Client.Services
+@using MiniBay.Shared.Feature.Products
+@using System.Threading
 @inject CartService cartService
+@inject HttpClient Http
+@inject NavigationManager Navigation
 
 <nav class="mini-navbar">
-    @if (isUserMenuVisible)
+    @if (isUserMenuVisible || (isSearchVisible && searchResults.Any()))
     {
-        <div class="overlay" @onclick="CloseUserMenu"></div>
+        <div class="overlay" @onclick="CloseAllMenus"></div>
     }
 
     <div class="navbar-container">
@@ -26,13 +31,43 @@
         </div>
 
         <div class="nav-actions">
-            <form class="search-form">
-                <input type="search" placeholder="Buscar..." />
-                <button type="submit" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </form>
+
+            <div class="search-form" @onclick:stopPropagation="true">
+                <input type="search" placeholder="Buscar..."
+                       @bind="searchQuery"
+                       @oninput="HandleSearchInput"
+                       @onfocus="() => isSearchVisible = true" />
+
+                <button type="button" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+                @if (isSearchVisible && !string.IsNullOrEmpty(searchQuery))
+                {
+                    <div class="search-results">
+                        @if (isSearchLoading)
+                        {
+                            <div class="search-result-item">Cargando...</div>
+                        }
+                        else if (searchResults.Any())
+                        {
+                            @foreach (var product in searchResults)
+                            {
+                                <div class="search-result-item" @onclick="() => NavigateToProduct(product.Id_Pro)">
+                                    <img src="@product.Url_Pro" alt="@product.Nam_Pro" class="search-result-image" />
+                                    <div class="search-result-info">
+                                        <strong>@product.Nam_Pro</strong>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="search-result-item">No se encontraron productos.</div>
+                        }
+                    </div>
+                }
+            </div>
 
             <AuthorizeView>
-
                 <Authorized>
                     <a href="/upload" class="btn-action"><i class="fa-solid fa-cloud-arrow-up"></i></a>
 
@@ -69,7 +104,6 @@
                         <span>Iniciar Sesión</span>
                     </a>
                 </NotAuthorized>
-
             </AuthorizeView>
 
         </div>
@@ -87,13 +121,82 @@
 
     private bool isMobileMenuVisible = false;
     private bool isUserMenuVisible = false;
-
     private int cartItemCount = 0;
+
+    private string searchQuery = string.Empty;
+    private List<ProductDto> searchResults = new();
+    private bool isSearchVisible = false;
+    private bool isSearchLoading = false;
+    private Timer searchTimer;
 
     protected override async Task OnInitializedAsync()
     {
         cartItemCount = await GetCartCount();
         cartService.OnChange += OnCartChanged;
+        searchTimer = new Timer(OnTimerElapsed, null, Timeout.Infinite, Timeout.Infinite);
+    }
+
+    private void HandleSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        isSearchVisible = true;
+        isSearchLoading = true;
+
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            isSearchLoading = false;
+            searchResults.Clear();
+            searchTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            StateHasChanged();
+            return;
+        }
+
+        searchTimer.Change(300, Timeout.Infinite);
+    }
+
+    private async void OnTimerElapsed(object? state)
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            isSearchLoading = false;
+            searchResults.Clear();
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        try
+        {
+            var apiBaseAddress = Http.BaseAddress.ToString().TrimEnd('/');
+            var results = await Http.GetFromJsonAsync<List<ProductDto>>($"api/Products/search?query={searchQuery}");
+
+            if (results != null)
+            {
+                foreach (var product in results)
+                {
+                    if (!string.IsNullOrEmpty(product.Url_Pro) && !product.Url_Pro.StartsWith("http"))
+                    {
+                        product.Url_Pro = $"{apiBaseAddress}{product.Url_Pro}";
+                    }
+                }
+                searchResults = results;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al buscar: {ex.Message}");
+            searchResults.Clear();
+        }
+        finally
+        {
+            isSearchLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void NavigateToProduct(int productId)
+    {
+        Navigation.NavigateTo($"/product/{productId}");
+        CloseAllMenus();
     }
 
     private async void OnCartChanged()
@@ -111,6 +214,7 @@
     public void Dispose()
     {
         cartService.OnChange -= OnCartChanged;
+        searchTimer?.Dispose();
     }
 
     private void ToggleMobileMenu()
@@ -131,8 +235,12 @@
         }
     }
 
-    private void CloseUserMenu()
+    private void CloseAllMenus()
     {
         isUserMenuVisible = false;
+        isSearchVisible = false;
+        isSearchLoading = false;
+        searchQuery = string.Empty;
+        searchResults.Clear();
     }
 }

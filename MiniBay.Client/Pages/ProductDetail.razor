@@ -57,33 +57,40 @@ else
     private ProductDto product;
     private bool isLoading = true;
     private string FullImageUrl { get; set; }
+    private int previousId = 0;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        isLoading = true;
-        try
+        if (Id != previousId)
         {
-            product = await Http.GetFromJsonAsync<ProductDto>($"api/Products/{Id}");
+            previousId = Id;
+            isLoading = true;
+            product = null;
 
-            if (product != null && !string.IsNullOrEmpty(product.Url_Pro))
+            try
             {
-                var apiBaseAddress = Http.BaseAddress.ToString();
-                apiBaseAddress = apiBaseAddress.TrimEnd('/');
-                FullImageUrl = $"{apiBaseAddress}{product.Url_Pro}";
+                product = await Http.GetFromJsonAsync<ProductDto>($"api/Products/{Id}");
+
+                if (product != null && !string.IsNullOrEmpty(product.Url_Pro))
+                {
+                    var apiBaseAddress = Http.BaseAddress.ToString();
+                    apiBaseAddress = apiBaseAddress.TrimEnd('/');
+                    FullImageUrl = $"{apiBaseAddress}{product.Url_Pro}";
+                }
             }
-        }
-        catch (System.Net.Http.HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-        {
-            product = null;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error al obtener el producto: {ex.Message}");
-            product = null;
-        }
-        finally
-        {
-            isLoading = false;
+            catch (System.Net.Http.HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                product = null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener el producto: {ex.Message}");
+                product = null;
+            }
+            finally
+            {
+                isLoading = false;
+            }
         }
     }
 
