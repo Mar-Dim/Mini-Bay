@@ -8,14 +8,55 @@ MiniBay es una aplicación fullstack desarrollada con *.NET 9, **Blazor WebAssem
 
 El proyecto está organizado de la siguiente forma:
 
+```
 MiniBay/
-├── MiniBay.API/ → Capa backend (Web API con .NET 9)
-├── MiniBay.Client/ → Capa frontend (Blazor WebAssembly)
-├── MiniBay.Shared/ → Modelos y contratos compartidos entre Client y API
-├── MiniBay.Domain/ → Entidades y lógica de negocio
-├── MiniBay.Application/ → Casos de uso, servicios y validaciones
-├── MiniBay.Infrastructure/ → Acceso a datos (EF Core, repositorios, SQL)
+├── MiniBay.API/              # Backend - Web API con .NET 9
+├── MiniBay.Client/           # Frontend - Blazor WebAssembly
+├── MiniBay.Shared/           # Modelos y contratos compartidos
+├── MiniBay.Domain/           # Entidades y lógica de negocio
+├── MiniBay.Application/      # Casos de uso, servicios y validaciones
+└── MiniBay.Infrastructure/   # Acceso a datos (EF Core, repositorios, SQL)
+```
 
+## 📦 Descripción de Capas
+
+### MiniBay.API
+**Backend - Web API**
+- Expone endpoints RESTful
+- Construido con ASP.NET Core 9
+- Punto de entrada para las peticiones del cliente
+
+### MiniBay.Client
+**Frontend - Blazor WebAssembly**
+- Interfaz de usuario interactiva
+- Ejecución en el navegador del cliente
+- Comunicación con la API mediante HTTP
+
+### MiniBay.Shared
+**Modelos Compartidos**
+- DTOs (Data Transfer Objects)
+- Contratos de API
+- Modelos de respuesta compartidos entre Client y API
+
+### MiniBay.Domain
+**Capa de Dominio**
+- Entidades del negocio
+- Reglas de negocio fundamentales
+- Independiente de infraestructura
+
+### MiniBay.Application
+**Capa de Aplicación**
+- Casos de uso de la aplicación
+- Lógica de servicios
+- Validaciones de negocio
+- Orquestación entre capas
+
+### MiniBay.Infrastructure
+**Capa de Infraestructura**
+- Implementación de Entity Framework Core
+- Repositorios de acceso a datos
+- Configuración de SQL Server/Base de datos
+- Implementaciones concretas de abstracciones
 
 Esta arquitectura promueve:
 - *Separación de capas y responsabilidades*
