@@ -1,0 +1,149 @@
+/* ====================================================== */
+/* ==   ESTILOS AISLADOS PARA Pages/Register.razor      == */
+/* ====================================================== */
+
+/* --- Contenedor Principal --- */
+/* Usamos ::deep para asegurarnos de que los estilos lleguen a los elementos HTML anidados */
+::deep .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Ocupa la mayor parte de la altura de la pantalla */
+    padding: 2rem;
+    background-color: var(--theme-bg-color); /* Usa la variable de fondo del tema */
+}
+
+/* --- Tarjeta de Registro --- */
+::deep .login-card {
+    width: 100%;
+    max-width: 450px;
+    background-color: var(--theme-surface-color); /* Usa la variable de superficie */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--theme-shadow); /* Usa la variable de sombra */
+    padding: 2.5rem;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+::deep .login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+::deep .login-header .fa-user-plus {
+    font-size: 2.5rem;
+    color: var(--brand-primary);
+    margin-bottom: 1rem;
+}
+
+::deep .login-header h2 {
+    color: var(--theme-text-primary);
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+::deep .login-header p {
+    color: var(--theme-text-secondary);
+}
+
+/* --- Formulario --- */
+::deep .login-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+::deep .login-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--theme-text-primary);
+}
+
+::deep .login-form .form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--theme-shadow);
+    background-color: var(--theme-bg-color);
+    color: var(--theme-text-primary);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+::deep .login-form .form-control:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
+/* --- Mensajes de Validación y Error --- */
+::deep .validation-message {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+::deep .alert.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 0.8rem;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* --- Botón de Envío --- */
+::deep .btn-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--brand-primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+::deep .btn-login:hover:not(:disabled) {
+    background-color: var(--brand-accent);
+}
+
+::deep .btn-login:disabled {
+    background-color: var(--theme-text-secondary);
+    cursor: not-allowed;
+}
+
+/* --- Pie de la Tarjeta --- */
+::deep .login-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--theme-shadow);
+    color: var(--theme-text-secondary);
+}
+
+::deep .login-footer a {
+    color: var(--brand-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* --- Spinner de Carga --- */
+::deep .spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

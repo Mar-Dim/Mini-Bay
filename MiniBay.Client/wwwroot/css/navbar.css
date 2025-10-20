@@ -1,0 +1,319 @@
+/* --- 1. Definición de Colores con Variables CSS --- */
+:root {
+    /* Paleta de colores para el modo claro (por defecto) */
+    --theme-bg-color: #f8f9ff;
+    --theme-surface-color: #ffffff; /* Color para cards, headers, etc. */
+    --theme-text-primary: #2d2d2d;
+    --theme-text-secondary: #666;
+    --theme-shadow: rgba(0, 0, 0, 0.08);
+
+    /* Colores de la marca */
+    --brand-primary: #f97316; /* Naranja principal */
+    --brand-secondary: #fb923c; /* Naranja secundario */
+    --brand-accent: #e65c00;
+
+    /* Colores del Navbar */
+    --navbar-bg: linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+    --navbar-text: #ffffff;
+}
+
+/* --- 2. Anulaciones para el Modo Oscuro --- */
+body.dark-mode {
+    --theme-bg-color: #121212;
+    --theme-surface-color: #1e1e1e;
+    --theme-text-primary: #e0e0e0;
+    --theme-text-secondary: #a0a0a0;
+    --theme-shadow: rgba(0, 0, 0, 0.25);
+}
+
+/* --- 3. Estilos Globales --- */
+body {
+    background-color: var(--theme-bg-color);
+    color: var(--theme-text-primary);
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* --- 4. Estilos del Navbar --- */
+.mini-navbar {
+    background: var(--navbar-bg);
+    padding: 1rem 0;
+    color: var(--navbar-text);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* Necesario para el posicionamiento de menús */
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--navbar-text);
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.main-menu {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.main-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; 
+    text-decoration: none;
+    color: var(--navbar-text);
+    font-weight: 500;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.main-menu a:hover {
+    border-bottom-color: var(--navbar-text);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.search-form {
+    display: flex;
+}
+
+.search-form input {
+    border-radius: 20px 0 0 20px;
+    border: none;
+    padding: 0.5rem 1rem;
+    width: 200px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+.search-form button {
+    background-color: var(--brand-accent);
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    color: var(--navbar-text);
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.btn-action:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-toggle {
+    cursor: pointer;
+}
+
+.theme-toggle .fa-sun { display: none; }
+.theme-toggle .fa-moon { display: block; }
+
+.dark-mode .theme-toggle .fa-sun { display: block; }
+.dark-mode .theme-toggle .fa-moon { display: none; }
+
+.menu-toggler {
+    display: none; /* Oculto por defecto en pantallas grandes */
+    background: none;
+    border: none;
+    color: var(--navbar-text);
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* --- 5. Estilos del Menú de Usuario y Overlay --- */
+.user-menu-container {
+    position: relative;
+}
+
+.user-avatar-btn {
+    padding: 0.5rem;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.user-dropdown-menu {
+    display: none; 
+    position: absolute;
+    top: calc(100% + 15px);
+    right: 0;
+    background-color: var(--theme-surface-color);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px var(--theme-shadow);
+    padding: 0.5rem 0;
+    width: 180px;
+    z-index: 1001; 
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.user-dropdown-menu.show {
+    display: block;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    z-index: 1000;
+}
+
+/* --- 6. ESTILOS RESPONSIVOS CORREGIDOS Y UNIFICADOS --- */
+
+@media (max-width: 1024px) {
+    .search-form {
+        display: none;
+    }
+
+    /* Ocultamos el contenedor del menú por defecto en pantallas pequeñas */
+    .nav-links-container {
+        display: none; 
+        position: absolute;
+        top: 100%; 
+        left: 0;
+        width: 100%;
+        background: var(--navbar-bg);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        animation: slideDown 0.3s ease-out;
+        z-index: 999; /* ¡CRÍTICO! Para que se muestre por encima del contenido */
+    }
+
+    /* Mostramos el contenedor cuando Blazor añade la clase 'active' */
+    .nav-links-container.active {
+        display: block;
+    }
+
+    /* Reajustamos .main-menu para que sea vertical DENTRO de su contenedor visible */
+    .main-menu {
+        display: flex; /* Debe ser flex, no none */
+        flex-direction: column; 
+        width: 100%;
+        gap: 0;
+        padding: 0.5rem 0;
+    }
+
+    .main-menu li {
+        width: 100%;
+    }
+
+    .main-menu a {
+        padding: 1rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        justify-content: flex-start;
+    }
+    
+    .main-menu a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-bottom-color: transparent; 
+    }
+
+    /* Mostramos el botón de la hamburguesa */
+    .menu-toggler {
+        display: block; 
+    }
+}
+
+@media (max-width: 768px) {
+    .logo-text {
+        display: none; 
+    }
+    .nav-actions a[href="/upload"] {
+        display: none; 
+    }
+}
+
+/* --- 7. Animaciones y Contenido de Página --- */
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.banner-mini {
+    background-color: var(--theme-surface-color);
+    color: var(--theme-text-primary);
+    text-align: center;
+    padding: 6rem 1rem;
+    border-radius: 10px;
+    margin: 2rem auto;
+    max-width: 1400px;
+}
+
+.btn-banner {
+    background-color: var(--brand-primary);
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.card-product {
+    background: var(--theme-surface-color);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px var(--theme-shadow);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-product:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px var(--theme-shadow);
+}
+
+.product-info h3 {
+    color: var(--theme-text-primary);
+}
+
+.desc {
+    color: var(--theme-text-secondary);
+}
+
+.price {
+    color: var(--brand-primary);
+}
+
+.btn-view {
+    background-color: var(--theme-text-primary);
+    color: var(--theme-bg-color);
+}

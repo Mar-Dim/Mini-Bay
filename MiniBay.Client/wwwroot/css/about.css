@@ -1,0 +1,168 @@
+/* --- Banner de la Página "Sobre Nosotros" --- */
+.banner-about {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.pexels.com/photos/50987/money-card-business-credit-card-50987.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center/cover no-repeat;
+    color: #fff;
+    text-align: center;
+    padding: 6rem 1rem;
+}
+
+.content-banner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content-banner p {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--brand-secondary);
+}
+
+.content-banner h2 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/* --- Estructura y Contenedores --- */
+.main-content {
+    background-color: var(--theme-bg-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.heading-1 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    color: var(--theme-text-primary);
+}
+
+/* --- Sección de Introducción --- */
+.container-about {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.about-us-image {
+    flex: 1;
+    max-width: 500px;
+}
+
+.about-us-image img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--theme-shadow);
+}
+
+.about-us-content {
+    flex: 1.2;
+}
+
+.about-us-content h1 {
+    text-align: left;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.about-us-content h2 {
+    font-size: 1.5rem;
+    color: var(--brand-primary);
+    margin-bottom: 1.5rem;
+}
+
+.about-us-content p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--theme-text-secondary);
+    margin-bottom: 1rem;
+}
+
+/* --- Sección de Pilares --- */
+.pilares-section {
+    background-color: var(--theme-surface-color);
+}
+
+.container-pilares {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.pilar-card {
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--theme-bg-color); /* Color de fondo ligeramente diferente */
+    border-radius: 15px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.pilar-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px var(--theme-shadow);
+}
+
+.pilar-icon {
+    font-size: 2.5rem;
+    color: var(--brand-primary);
+    margin-bottom: 1.5rem;
+}
+
+.pilar-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--theme-text-primary);
+}
+
+.pilar-card p {
+    color: var(--theme-text-secondary);
+    line-height: 1.6;
+}
+
+/* --- Galería de Imágenes --- */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 250px);
+    gap: 1rem;
+    padding: 4rem 1rem;
+}
+
+.gallery img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Posicionamiento de la galería (opcional, para un look más dinámico) */
+.gallery-img-1 { grid-column: 1 / 3; grid-row: 1 / 2; }
+.gallery-img-2 { grid-column: 3 / 4; grid-row: 1 / 3; }
+.gallery-img-3 { grid-column: 4 / 5; grid-row: 1 / 2; }
+.gallery-img-4 { grid-column: 1 / 2; grid-row: 2 / 3; }
+.gallery-img-5 { grid-column: 2 / 3; grid-row: 2 / 3; }
+
+/* --- Responsive --- */
+@media (max-width: 992px) {
+    .container-about {
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+    .about-us-content h1 { text-align: center; }
+}
+
+@media (max-width: 768px) {
+    .content-banner h2 { font-size: 2.5rem; }
+    .heading-1 { font-size: 2rem; }
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+    /* Ajustes para que la galería fluya */
+    .gallery-img-1, .gallery-img-2, .gallery-img-3, .gallery-img-4, .gallery-img-5 {
+        grid-column: auto;
+        grid-row: auto;
+    }
+}

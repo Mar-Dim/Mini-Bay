@@ -1,0 +1,211 @@
+@page "/cart"
+@using MiniBay.Application.DTO
+@using MiniBay.Client.Services
+@using MiniBay.Client.Shared 
+@using MiniBay.Shared.Feature.Products
+@inject CartService cartService
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject NotificationService notificationService
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+<PageTitle>Mi Carrito</PageTitle>
+
+@if (isLoading)
+{
+    <p><em>Cargando carrito...</em></p>
+}
+else
+{
+    <section class="container cart-section cart-theme">
+        <h1 class="heading-1">Mi Carrito de Compras</h1>
+
+        @if (!displayItems.Any())
+        {
+            <div class="cart-empty">
+                <img src="https://api.iconify.design/solar:cart-large-minimalistic-line-duotone.svg"
+                     class="cart-empty-image" alt="Carrito vacío" />
+                <p>No se han encontrado productos.</p>
+                <button class="btn btn-custom"
+                        @onclick="@(() => Navigation.NavigateTo("/"))">
+                    Ver productos
+                </button>
+            </div>
+        }
+        else
+        {
+            <div class="cart-layout">
+                <div class="cart-items-list">
+                    @foreach (var item in displayItems)
+                    {
+                        <div class="cart-item-card">
+                            <img src="@item.ImageUrl" alt="@item.Name" class="cart-item-image" />
+                            <div class="cart-item-details">
+                                <h3>@item.Name</h3>
+                                <p class="price">@item.Price.ToString("C")</p>
+                            </div>
+                            <div class="cart-item-quantity">
+                                <input type="number" min="1" class="form-control"
+                                       value="@item.Quantity"
+                                       @onchange="(e) => UpdateItemQuantity(item.ProductId, e.Value)" />
+                            </div>
+                            <div class="cart-item-total">
+                                <p class="amount">@((item.Price * item.Quantity).ToString("C"))</p>
+                            </div>
+                            <div class="cart-item-remove">
+                                <button class="btn btn-danger-outline" @onclick="() => RemoveItem(item.ProductId)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <aside class="cart-summary">
+                    <h2>Resumen del Pedido</h2>
+                    <div class="summary-line">
+                        <span>Subtotal:</span>
+                        <span class="amount">@total.ToString("C")</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Envío:</span>
+                        <span>Gratis</span>
+                    </div>
+                    <hr />
+                    <div class="summary-total">
+                        <strong>Total:</strong>
+                        <strong class="amount">@total.ToString("C")</strong>
+                    </div>
+                    <button class="btn btn-custom btn-block" @onclick="ShowPaymentModal">
+                        Proceder al Pago
+                    </button>
+                </aside>
+            </div>
+        }
+    </section>
+}
+
+<PaymentModal IsVisible="isPaymentModalVisible" 
+              TotalAmount="total" 
+              OnClose="HidePaymentModal" 
+              OnPaymentConfirmed="HandlePaymentConfirmation" />
+
+@code {
+    private bool isLoading = true;
+    private List<DisplayCartItem> displayItems = new();
+    private decimal total = 0;
+    private bool isPaymentModalVisible = false;
+
+    private class DisplayCartItem
+    {
+        public int ProductId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCartAsync();
+    }
+
+    private async Task LoadCartAsync()
+    {
+        isLoading = true;
+        displayItems.Clear();
+        total = 0;
+
+        var cartItems = await cartService.GetCartItemsAsync();
+
+        if (!cartItems.Any())
+        {
+            isLoading = false;
+            return;
+        }
+
+        try
+        {
+            var allProducts = await Http.GetFromJsonAsync<List<ProductDto>>("api/Products");
+            if (allProducts == null) { isLoading = false; return; }
+
+            var apiBaseAddress = Http.BaseAddress?.ToString()?.TrimEnd('/') ?? string.Empty;
+
+            foreach (var item in cartItems)
+            {
+                var product = allProducts.FirstOrDefault(p => p.Id_Pro == item.ProductId);
+                if (product != null)
+                {
+                    string fullImageUrl = string.IsNullOrEmpty(product.Url_Pro)
+                        ? string.Empty
+                        : $"{apiBaseAddress}{product.Url_Pro}";
+
+                    displayItems.Add(new DisplayCartItem
+                    {
+                        ProductId = product.Id_Pro,
+                        Name = product.Nam_Pro,
+                        Price = product.Pri_Pro,
+                        ImageUrl = fullImageUrl,
+                        Quantity = item.Quantity
+                    });
+                }
+            }
+
+            CalculateTotal();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar productos del carrito: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void CalculateTotal() =>
+        total = displayItems.Sum(item => item.Price * item.Quantity);
+
+    private async Task RemoveItem(int productId)
+    {
+        var itemToRemove = displayItems.FirstOrDefault(i => i.ProductId == productId);
+        await cartService.RemoveFromCartAsync(productId);
+        await LoadCartAsync();
+        if(itemToRemove != null)
+        {
+            notificationService.ShowNotification($"{itemToRemove.Name} eliminado del carrito.", NotificationType.Info);
+        }
+    }
+
+    private async Task UpdateItemQuantity(int productId, object? value)
+    {
+        if (int.TryParse(value?.ToString(), out int quantity))
+        {
+            await cartService.UpdateQuantityAsync(productId, quantity);
+            var item = displayItems.FirstOrDefault(i => i.ProductId == productId);
+            if (item != null)
+            {
+                if (quantity > 0) item.Quantity = quantity;
+                else displayItems.Remove(item);
+                CalculateTotal();
+                StateHasChanged();
+            }
+        }
+    }
+
+    private void ShowPaymentModal() => isPaymentModalVisible = true;
+    private void HidePaymentModal() => isPaymentModalVisible = false;
+
+    private async Task HandlePaymentConfirmation(PaymentModal.PaymentDetails details)
+    {
+        HidePaymentModal();
+        
+        await cartService.ClearCartAsync();
+        
+        notificationService.ShowNotification("Pago completado con éxito. ¡Gracias por tu compra!", NotificationType.Success);
+        
+        await LoadCartAsync(); 
+        StateHasChanged(); 
+    }
+}

@@ -1,41 +1,85 @@
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
+using MiniBay.Application.Features.About;
+using MiniBay.Application.Features.Contact;
+using MiniBay.Application.Features.Products;
+using MiniBay.Application.Interfaces;
+using MiniBay.Application.Services;
+using MiniBay.Infrastructure.Data;
+using MiniBay.Infrastructure.Features.Products;
+using MiniBay.Infrastructure.Persistence;
+using MiniBay.Infrastructure.Services;
+using MiniBay.Application.Features.Products.Queries;
+using MiniBay.Application.Contracts.Persistence;
+using MiniBay.Infrastructure.Persistence.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddDbContext<MiniBayDbContext>(options =>
+    options.UseSqlServer("Server=localhost,1433;Database=MiniBayDb;User Id=sa;Password=Clave123;TrustServerCertificate=True;"));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
+builder.Services.AddScoped<ITokenService, JwtTokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAboutService, AboutService>();
+builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddControllers();
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024;
+    options.ValueLengthLimit = int.MaxValue;
+    options.MultipartHeadersLengthLimit = int.MaxValue;
+});
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 10 * 1024 * 1024;
+    options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(2);
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorClient", policy =>
+    {
+        policy.WithOrigins("https://localhost:7289", "http://localhost:5195")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
+builder.Services.AddScoped<IProductQueryService, ProductQueryService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+var webRoot = app.Environment.WebRootPath;
+if (string.IsNullOrEmpty(webRoot))
+{
+    webRoot = Path.Combine(app.Environment.ContentRootPath, "wwwroot");
+}
+
+var imagesPath = Path.Combine(webRoot, "images", "products");
+if (!Directory.Exists(imagesPath))
+{
+    Directory.CreateDirectory(imagesPath);
+}
+
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.UseCors("AllowBlazorClient");
+app.UseStaticFiles();
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

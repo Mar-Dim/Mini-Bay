@@ -1,0 +1,87 @@
+@page "/about"
+@using MiniBay.Shared.Features.About   
+@inject HttpClient Http
+
+<PageTitle>Sobre Nosotros</PageTitle>
+
+@if (aboutData == null)
+{
+    <p><em>Cargando nuestra historia...</em></p>
+}
+else
+{
+    <!-- Banner Superior -->
+    <section class="banner banner-about">
+        <div class="content-banner">
+            <p>@aboutData.Banner.Subtitle</p>
+            @* Usamos MarkupString para que el tag <br/> se renderice correctamente *@
+            <h2>@((MarkupString)aboutData.Banner.Title)</h2>
+        </div>
+    </section>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <!-- Sección de Introducción -->
+        <section class="about-us-section">
+            <div class="container container-about">
+                <div class="about-us-image">
+                    @* Usamos los tags de imagen correctos con el alt text *@
+                    <img src="@aboutData.Introduction.ImageUrl" alt="Persona empacando un producto para vender online">
+                </div>
+                <div class="about-us-content">
+                    @* Colocamos los títulos en los encabezados correctos *@
+                    <h1 class="heading-1">@aboutData.Introduction.Heading</h1>
+                    <h2>@aboutData.Introduction.Title</h2>
+
+                    @* Usamos un bucle @foreach para renderizar cada párrafo en su propio tag <p> *@
+                    @foreach (var paragraph in aboutData.Introduction.Paragraphs)
+                    {
+                        <p>@paragraph</p>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Pilares -->
+        <section class="container pilares-section">
+            <h1 class="heading-1">@aboutData.Pillars.Title</h1>
+            <div class="container-pilares">
+                @* Hacemos un bucle por cada pilar y construimos la tarjeta dinámicamente *@
+                @foreach (var pillar in aboutData.Pillars.PillarItems)
+                {
+                    <div class="pilar-card">
+                        <div class="pilar-icon"><i class="@pillar.Icon"></i></div>
+                        <h3>@pillar.Title</h3>
+                        <p>@pillar.Description</p>
+                    </div>
+                }
+            </div>
+        </section>
+
+        <!-- Galería de Imágenes -->
+        <section class="gallery">
+            @* Un bucle para crear un tag <img> por cada URL en la lista de la galería *@
+            @foreach (var imageUrl in aboutData.Gallery.ImageUrls)
+            {
+                <img src="@imageUrl" alt="Imagen de la galería de productos" />
+            }
+        </section>
+    </main>
+}
+
+
+@code {
+    private AboutUsPageData? aboutData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            aboutData = await Http.GetFromJsonAsync<AboutUsPageData>("api/about");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"No se pudieron cargar los datos de la página 'Sobre Nosotros': {ex.Message}");
+        }
+    }
+}

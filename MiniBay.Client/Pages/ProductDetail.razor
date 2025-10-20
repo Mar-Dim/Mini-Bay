@@ -1,0 +1,130 @@
+@page "/product/{Id:int}"
+
+@inject CartService CartService
+@inject NotificationService NotificationService
+
+@using MiniBay.Client.Services
+@inject CartService cartService
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using MiniBay.Application.DTO
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+
+@if (isLoading)
+{
+    <div class="text-center mt-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando detalles del producto...</p>
+    </div>
+}
+else if (product is null)
+{
+    <div class="alert alert-warning text-center mt-5" role="alert">
+        <img src="https://api.iconify.design/material-symbols:error-outline.svg" alt="Error 404" style="width: 80px; height: 80px; margin-bottom: 1rem; opacity: 0.7; color: currentColor;" />
+        <h4 class="alert-heading">Producto no encontrado</h4>
+        <p>El producto que buscas no existe o fue removido. Por favor, verifica la URL o vuelve al catálogo.</p>
+        <hr>
+        <a href="/" class="btn btn-secondary">Volver al catálogo</a>
+    </div>
+}
+else
+{
+
+    <div class="container mt-5 product-detail-container">
+        
+        <div class="product-detail-panel">
+            
+            <div class="row">
+                <div class="col-md-6 text-center product-image-col">
+                    
+                    <img src="@FullImageUrl" class="img-fluid rounded-4 shadow-sm product-image" alt="@product.Nam_Pro"> 
+                </div>
+                <div class="col-md-6 product-info-col">
+                   
+                    <h3 class="product-name">@product.Nam_Pro</h3> 
+
+                   
+                    <p class="product-description fs-5">@product.Des_Pro</p>
+
+                    
+                    <h4 class="product-price text-primary mt-3 mb-3">$@product.Pri_Pro.ToString("F2")</h4>
+
+                    <button class="btn btn-success btn-lg mt-3 px-5 add-to-cart-button" @onclick="AddToCart">
+                        <i class="bi bi-cart-plus-fill me-2"></i> Agregar al carrito
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private ProductDto product;
+    private bool isLoading = true;
+    private string FullImageUrl { get; set; } = string.Empty;
+    private int previousId = 0;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id != previousId)
+        {
+            previousId = Id;
+            isLoading = true;
+            product = null;
+            FullImageUrl = string.Empty;
+
+            try
+            {
+                product = await Http.GetFromJsonAsync<ProductDto>($"api/Products/{Id}");
+
+                if (product != null && !string.IsNullOrEmpty(product.Url_Pro))
+                {
+                    var apiBaseAddress = Http.BaseAddress.ToString();
+                    apiBaseAddress = apiBaseAddress.TrimEnd('/');
+                    FullImageUrl = $"{apiBaseAddress}{product.Url_Pro}";
+                }
+                else if (product != null)
+                {
+                    FullImageUrl = "/images/placeholder.png"; 
+                }
+            }
+            catch (System.Net.Http.HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                product = null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener el producto: {ex.Message}");
+                product = null;
+            }
+            finally
+            {
+                isLoading = false;
+            }
+        }
+    }
+
+    private async Task AddToCart()
+    {
+        if (product != null)
+        {
+            await cartService.AddToCartAsync(product);
+            NotificationService.ShowNotification($"{product.Nam_Pro} agregado al carrito.", NotificationType.Success);
+            Navigation.NavigateTo("/cart");
+        }
+
+    }
+
+}
+
+

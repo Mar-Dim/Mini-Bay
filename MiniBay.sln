@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniBay.API", "MiniBay.API\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniBay.Client", "MiniBay.Client\MiniBay.Client.csproj", "{4A3DD082-CE2C-438C-8C11-A0985B444CA4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniBay.Infrastructure", "MiniBay.Infrastructure\MiniBay.Infrastructure.csproj", "{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniBay.Shared", "MiniBay.Shared\MiniBay.Shared.csproj", "{62DE76AC-2665-4B73-8CA2-115F5425E20E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,8 +73,35 @@ Global
 		{4A3DD082-CE2C-438C-8C11-A0985B444CA4}.Release|x64.Build.0 = Release|Any CPU
 		{4A3DD082-CE2C-438C-8C11-A0985B444CA4}.Release|x86.ActiveCfg = Release|Any CPU
 		{4A3DD082-CE2C-438C-8C11-A0985B444CA4}.Release|x86.Build.0 = Release|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Debug|x64.Build.0 = Debug|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Debug|x86.Build.0 = Debug|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Release|x64.ActiveCfg = Release|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Release|x64.Build.0 = Release|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Release|x86.ActiveCfg = Release|Any CPU
+		{F2EDE9CA-C976-4F37-B2B4-4E76D17936E3}.Release|x86.Build.0 = Release|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Debug|x64.Build.0 = Debug|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Debug|x86.Build.0 = Debug|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Release|x64.ActiveCfg = Release|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Release|x64.Build.0 = Release|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Release|x86.ActiveCfg = Release|Any CPU
+		{62DE76AC-2665-4B73-8CA2-115F5425E20E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {91C43F94-1B08-4633-B3CE-E0ECE179F581}
 	EndGlobalSection
 EndGlobal

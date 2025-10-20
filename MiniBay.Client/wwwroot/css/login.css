@@ -1,0 +1,132 @@
+/* --- Contenedor Principal del Login --- */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Centra verticalmente en la página */
+    padding: 2rem;
+}
+
+/* --- Tarjeta de Login --- */
+.login-card {
+    width: 100%;
+    max-width: 450px;
+    background-color: var(--theme-surface-color);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--theme-shadow);
+    padding: 2.5rem;
+    transition: background-color 0.3s;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header .fa-right-to-bracket {
+    font-size: 2.5rem;
+    color: var(--brand-primary);
+    margin-bottom: 1rem;
+}
+
+.login-header h2 {
+    color: var(--theme-text-primary);
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.login-header p {
+    color: var(--theme-text-secondary);
+}
+
+/* --- Formulario --- */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--theme-text-primary);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--theme-shadow);
+    background-color: var(--theme-bg-color);
+    color: var(--theme-text-primary);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
+/* --- Botón y Mensajes --- */
+.btn-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--brand-primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-login:hover {
+    background-color: var(--brand-accent);
+}
+
+.btn-login:disabled {
+    background-color: var(--theme-text-secondary);
+    cursor: not-allowed;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--theme-text-secondary);
+}
+
+.login-footer a {
+    color: var(--brand-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* --- Spinner de Carga --- */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

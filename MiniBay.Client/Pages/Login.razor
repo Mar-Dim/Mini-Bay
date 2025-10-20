@@ -1,0 +1,135 @@
+@page "/login"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+
+@using Blazored.LocalStorage
+
+@inject ILocalStorageService LocalStorage
+
+@using System.ComponentModel.DataAnnotations
+@using System.Text.Json
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <h2>Iniciar Sesión</h2>
+            <p>Bienvenido de nuevo a MiniBay</p>
+        </div>
+
+        <EditForm Model="@loginModel" OnValidSubmit="HandleLoginAsync" class="login-form">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label for="email">Correo Electrónico</label>
+                <InputText id="email" class="form-control" @bind-Value="loginModel.Email" placeholder="tu@email.com" />
+                <ValidationMessage For="@(() => loginModel.Email)" />
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <InputText id="password" type="password" class="form-control" @bind-Value="loginModel.Password" placeholder="••••••••" />
+                <ValidationMessage For="@(() => loginModel.Password)" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-error">@errorMessage</div>
+            }
+
+            <button type="submit" class="btn-login" disabled="@isLoading">
+                @if (isLoading)
+                {
+                    <span class="spinner"></span>
+                    <span>Ingresando...</span>
+                }
+                else
+                {
+                    <span>Ingresar</span>
+                }
+            </button>
+        </EditForm>
+
+        <div class="login-footer">
+            <span>¿No tienes una cuenta? <a href="/register">Regístrate aquí</a></span>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private LoginModel loginModel = new();
+    private bool isLoading = false;
+    private string? errorMessage;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    private async Task HandleLoginAsync()
+    {
+        isLoading = true;
+        errorMessage = null;
+        StateHasChanged();
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/auth/login", loginModel);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<LoginResult>();
+                if (result?.Token != null)
+                {
+                    // 3. CAMBIAMOS EL MÉTODO A GENÉRICO <string>
+                    await LocalStorage.SetItemAsync<string>("authToken", result.Token);
+
+                    ((JwtAuthStateProvider)AuthStateProvider).NotifyUserAuthentication(result.Token);
+
+
+                    Navigation.NavigateTo(ReturnUrl ?? "/");
+                }
+                else
+                {
+                    errorMessage = "No se recibió un token de autenticación válido.";
+                }
+            }
+            else
+            {
+                errorMessage = await response.Content.ReadAsStringAsync();
+            }
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "No se pudo conectar con el servidor. Por favor, revisa tu conexión a internet.";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.";
+            Console.WriteLine($"Error en login: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    public class LoginModel
+    {
+        [Required(ErrorMessage = "El correo es obligatorio.")]
+        [EmailAddress(ErrorMessage = "El formato del correo no es válido.")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "La contraseña es obligatoria.")]
+        public string Password { get; set; } = string.Empty;
+    }
+
+    public class LoginResult
+    {
+        public string? Token { get; set; }
+    }
+}
