@@ -1,4 +1,4 @@
-### 🛍 MiniBay
+## 🛍 MiniBay
 
 MiniBay es una aplicación fullstack desarrollada con *.NET 9, **Blazor WebAssembly* y *Onion Architecture*, que implementa una estructura modular para mantener una clara separación de responsabilidades entre capas.
 
@@ -28,7 +28,7 @@ Esta arquitectura promueve:
 
 La base de datos de *MiniBay* se ejecuta en un contenedor *SQL Server 2022*.
 
-### 🧱 1. Crear el contenedor
+## 🧱 1. Crear el contenedor
 
 Ejecuta este comando (asegúrate de tener Docker Desktop corriendo):
 docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Clave123" \
@@ -38,7 +38,7 @@ Esto levantará un contenedor con SQL Server escuchando en el puerto 1433.
 
 ---
 
-###⚙ 2. Configuración de conexión
+## ⚙ 2. Configuración de conexión
 
 El archivo appsettings.json dentro de MiniBay.API incluye la cadena de conexión:
 
@@ -52,13 +52,18 @@ builder.Services.AddDbContext<MiniBayDbContext>(options =>
 
 ---
 
-###3. Migraciones y actualización de la base
+## 3. Migraciones y actualización de la base
+
+
 Para aplicar las migraciones de Entity Framework:
+
 dotnet ef database update --project MiniBay.Infrastructure
 dotnet tool install --global dotnet-ef
 
 ---
-###🚀 Ejecución del Proyecto
+
+
+## 🚀 Ejecución del Proyecto
 
 Asegúrate de tener:
 
@@ -73,6 +78,7 @@ Establece MiniBay.API como proyecto de inicio.
 Ejecuta con F5 o Ctrl+F5 para levantar API + Client (si está configurado el proxy).
 
 🔹 Opción 2: Ejecutar manualmente desde CLI
+
 # Levantar la API
 dotnet run --project MiniBay.API
 
